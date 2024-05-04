@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Utilisateur</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Profil Utilisateur</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Informations Utilisateur</h5>
+            <p class="card-text"><strong>Pseudo:</strong> {{ user.first_name}}</p>
+            <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
+            <!-- Ajoutez ici d'autres champs que vous souhaitez afficher -->
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
