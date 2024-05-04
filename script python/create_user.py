@@ -1,13 +1,18 @@
 import psycopg2
-
+from dotenv import load_dotenv
+import os
+load_dotenv()
 try:
     connection = psycopg2.connect(
-        user="alexandre",
-        password="esgi2024",
-        host="exchange.cbquewsgc2wo.eu-west-1.rds.amazonaws.com",
-        port="5432",
-        database="postgre"
+        # Connexion à la base de données en utilisant les variables d'environnement
+
+        user=os.environ.get("DB_USER"),
+        password=os.environ.get("DB_PASSWORD"),
+        host=os.environ.get("DB_HOST"),
+        port=os.environ.get("DB_PORT"),
+        database=os.environ.get("DB_NAME")
     )
+    
     cursor = connection.cursor()
     postgres_insert_query = """ INSERT INTO user_data (PSEUDO, MAIL, PASSWORD) VALUES (%s,%s,%s)"""
     record_to_insert = ('VICTOR', 'jouinvictor1@gmail.com', '1234')
