@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Back_end_PA',
+    'projet_annuel',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +56,7 @@ import os
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Assurez-vous que ce chemin est correct
+        'DIRS': [os.path.join(BASE_DIR, './templates')],  # Assurez-vous que ce chemin est correct,  # Assurez-vous que ce chemin est correct
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
