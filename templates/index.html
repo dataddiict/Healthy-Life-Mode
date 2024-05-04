@@ -6,9 +6,19 @@
 </head>
 <body>
     <h1>Hello World</h1>
-    <h2> Chemin vers les page</h2>
+    <h2> Chemin vers les pages</h2>
     <ul>
-        <li><a href="{% url 'signup' %}">Inscription</a></li>
-        <li><a href="{% url 'signin' %}">Connexion</a></li>
+        <!-- Check if user is authenticated -->
+        {% if user.is_authenticated %}
+            <!-- Display link to profile -->
+            <li><a href="{% url 'user_profile' %}">Profil</a></li>
+            <!-- Display logout link -->
+            <li><a href="{% url 'logout' %}">Déconnexion</a></li>
+        {% else %}
+            <!-- Display links for signup and signin when user is not authenticated -->
+            <li><a href="{% url 'signup' %}">Inscription</a></li>
+            <li><a href="{% url 'signin' %}">Connexion</a></li>
+        {% endif %}
+    </ul>
 </body>
 </html>
