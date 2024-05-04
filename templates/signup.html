@@ -6,10 +6,115 @@
     <title>Inscription</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Style for the main heading */
+        h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 42px;
+            text-align: center;
+            color: #ffffff;
+            margin: -2px;
+        }
+
+        /* Style for the secondary heading */
+        h2 {
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        /* Style for the top menu bar */
+        nav {
+            background: linear-gradient(to right, #e211d8, #a751ee);
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        /* Style for the menu items */
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        /* Style for menu item links */
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        /* Style for menu item links */
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        /* Style for logout button */
+        .logout-btn {
+            background-color: #61575d;
+            color: #fff;
+            border: none;
+            padding:16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 24px;
+            transition: background-color 0.3s;
+            align-items: center;
+        }
+
+        /* Hover effect for logout button */
+        .logout-btn:hover {
+            
+            background-color: #c82333;
+        }
+
+        /* Style for profile link */
+        .profile-link {
+            color: #fff;
+            font-size: 24px; margin: 18px;
+        }
+
+        /* Style for signup and signin links */
+        .signup-signin-links {
+            display: flex;
+            font-size: 24px;
+        }
+
+        /* Style for signup and signin links */
+        .signup-signin-links li {
+            margin-right: 20px;
+        }
+
+        /* Style for signup and signin links */
+        .signup-signin-links li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 24px;
+        }
+    </style>
 </head>
 <body>
-
+    <nav>
+        <h1>Health-Life-Mod</h1>
+        <div>
+            <!-- Display signup and signin links -->
+            <ul class="signup-signin-links">
+                <li><a href="{% url 'signup' %}">Inscription</a></li>
+                <li><a href="{% url 'signin' %}">Connexion</a></li>
+            </ul>
+        </div>
+    </nav>
 <div class="container mt-5">
+
     <h1>Inscription</h1>
     <form id="registrationForm" method="post">
         {% csrf_token %}

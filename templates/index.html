@@ -2,23 +2,134 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Hello World</title>
+    <title>Health-Life-Mod</title>
+    <style>
+        /* Style for the main heading */
+        h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 42px;
+            text-align: center;
+            color: #ffffff;
+            margin: -2px;
+        }
+
+        /* Style for the secondary heading */
+        h2 {
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        /* Style for the top menu bar */
+        nav {
+            background: linear-gradient(to right, #e211d8, #a751ee);
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        /* Style for the menu items */
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        /* Style for menu item links */
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        /* Style for menu item links */
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        /* Style for logout button */
+        .logout-btn {
+            background-color: #61575d;
+            color: #fff;
+            border: none;
+            padding:16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 24px;
+            transition: background-color 0.3s;
+            align-items: center;
+        }
+
+        /* Hover effect for logout button */
+        .logout-btn:hover {
+            
+            background-color: #c82333;
+        }
+
+        /* Style for profile link */
+        .profile-link {
+            color: #fff;
+            font-size: 24px; margin: 18px;
+        }
+
+        /* Style for signup and signin links */
+        .signup-signin-links {
+            display: flex;
+            font-size: 24px;
+        }
+
+        /* Style for signup and signin links */
+        .signup-signin-links li {
+            margin-right: 20px;
+        }
+
+        /* Style for signup and signin links */
+        .signup-signin-links li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 24px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello World</h1>
-    <h2> Chemin vers les pages</h2>
-    <ul>
-        <!-- Check if user is authenticated -->
-        {% if user.is_authenticated %}
-            <!-- Display link to profile -->
-            <li><a href="{% url 'user_profile' %}">Profil</a></li>
-            <!-- Display logout link -->
-            <li><a href="{% url 'logout' %}">Déconnexion</a></li>
-        {% else %}
-            <!-- Display links for signup and signin when user is not authenticated -->
-            <li><a href="{% url 'signup' %}">Inscription</a></li>
-            <li><a href="{% url 'signin' %}">Connexion</a></li>
-        {% endif %}
-    </ul>
+    <!-- Top menu bar -->
+    <nav>
+        <h1>Healthy-Life-Mode</h1>
+        <div>
+            <!-- Check if user is authenticated -->
+            {% if user.is_authenticated %}
+                <!-- Display link to profile -->
+                <ul class="signup-signin-links">
+                <a href="{% url 'user_profile' %}" class="profile-link">Profil</a>
+                <!-- Display logout link -->
+         
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit"  class="logout-btn">Déconnexion</button>
+                </form>
+            </ul>
+            {% else %}
+                <!-- Display signup and signin links -->
+                <ul class="signup-signin-links">
+                    <li><a href="{% url 'signup' %}">Inscription</a></li>
+                    <li><a href="{% url 'signin' %}">Connexion</a></li>
+              
+            {% endif %}
+        
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <h2>Chemin vers les pages</h2>
+    <!-- Add your content here -->
+
 </body>
 </html>
