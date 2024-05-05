@@ -121,3 +121,4 @@ prompt-toolkit==3.0.38
 psycopg2-binary
 python-dotenv
 django-cors-headers
+dj-database-url

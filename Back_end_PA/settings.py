@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 #import env
 from dotenv import load_dotenv
 load_dotenv()
@@ -55,7 +56,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
 
@@ -91,16 +91,8 @@ WSGI_APPLICATION = 'Back_end_PA.wsgi.application'
 }"""
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'USER': os.getenv('DB_USER'),
-        'NAME': os.getenv('DB_NAME'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
-    }
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL', os.environ.get('DB_DATABASE_URL')))
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
