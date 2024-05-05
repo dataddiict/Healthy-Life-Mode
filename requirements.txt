@@ -6,4 +6,4 @@
     smtplib==0.1.0
     psycopg2==2.9.1
     dotenv==0.0.5
-    numpy==1.21.0
+    numpy
