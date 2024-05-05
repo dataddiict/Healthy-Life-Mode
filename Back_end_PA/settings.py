@@ -132,9 +132,9 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
+ALLOWED_HOSTS = ['healthy-life-mode.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-ALLOWED_HOSTS = ['healthy-life-mode.onrender.com', 'localhost', '127.0.0.1']
 
 CORS_ALLOWED_ORIGINS = [
     'https://healthy-life-mode.onrender.com',
