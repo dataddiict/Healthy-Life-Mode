@@ -119,4 +119,4 @@ pluggy==1.2.0
 prometheus-client==0.17.0
 prompt-toolkit==3.0.38
 psycopg2-binary
-
+python-dotenv
