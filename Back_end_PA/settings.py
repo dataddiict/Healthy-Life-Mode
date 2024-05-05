@@ -1,3 +1,8 @@
+import os
+#import env
+from dotenv import load_dotenv
+load_dotenv()
+
 """
 Django settings for Back_end_PA project.
 
@@ -85,11 +90,11 @@ WSGI_APPLICATION = 'Back_end_PA.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'alexandre',
-        'NAME': 'postgre',
-        'PASSWORD': 'esgi2024',
-        'HOST': 'exchange.cbquewsgc2wo.eu-west-1.rds.amazonaws.com',
-        'PORT': '5432'
+        'USER': os.getenv('DB_USER'),
+        'NAME': os.getenv('DB_NAME'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -138,4 +143,4 @@ ALLOWED_HOSTS = ['healthy-life-mode.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Port sur lequel le serveur Django écoutera
-PORT = 8000
+PORT = 2024
