@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Back_end_PA',
     'projet_annuel',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'Back_end_PA.urls'
@@ -141,6 +144,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ALLOWED_HOSTS = ['healthy-life-mode.onrender.com', 'localhost', '127.0.0.1']
 
-
+CORS_ALLOWED_ORIGINS = [
+    'https://healthy-life-mode.onrender.com',
+    # Ajoutez d'autres domaines autorisés si nécessaire
+]
 # Port sur lequel le serveur Django écoutera
 PORT = 2024
