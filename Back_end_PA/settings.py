@@ -135,3 +135,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ALLOWED_HOSTS = ['healthy-life-mode.onrender.com', 'localhost', '127.0.0.1']
+
+
+# Port sur lequel le serveur Django écoutera
+PORT = 8000
