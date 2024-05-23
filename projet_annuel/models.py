@@ -15,6 +15,7 @@ class User(models.Model):
     first_name = models.CharField(max_length=100, null=True, blank=True)
     last_name = models.CharField(max_length=100, null=True, blank=True)
 
+
     @classmethod
     def create_user(cls, mail, password, first_name, last_name, username):
         try:
@@ -59,18 +60,33 @@ class User(models.Model):
     @classmethod
     def update_user(cls, mail, password, first_name, last_name, username, age, sexe):
         try:
-            # Mettre à jour l'utilisateur existant ou en créer un nouveau s'il n'existe pas déjà
-            user, created = DjangoUser.objects.update_or_create(
-                username=username,
-                defaults={
-                    'email': mail,
-                    'password': password,
-                    'first_name': first_name,
-                    'last_name': last_name,
-                    'age': age,
-                    'sexe': sexe
-                }
+            # Recherche de l'utilisateur dans la table auth_user de Django
+            user = DjangoUser.objects.get(email=mail)
+
+            # Mettre à jour les champs de l'utilisateur
+            user.username = username
+            user.email = mail
+            user.set_password(password)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+            # requete sql
+            conn = psycopg2.connect(
+                dbname=os.environ.get('DB_NAME'),
+                user=os.environ.get('DB_USER'),
+                password=os.environ.get('DB_PASSWORD'),
+                host=os.environ.get('DB_HOST'),
+                port=os.environ.get('DB_PORT')
             )
+            cursor = conn.cursor()
+            cursor.execute(
+                f"UPDATE auth_user SET age = {age}, sexe = '{sexe}' WHERE id = {user.id}"
+            )
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+
             print("Utilisateur mis à jour avec succès !")
             return user
 

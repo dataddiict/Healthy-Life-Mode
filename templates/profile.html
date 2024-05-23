@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,7 +64,7 @@
             background-color: #61575d;
             color: #fff;
             border: none;
-            padding:16px;
+            padding: 16px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 24px;
@@ -73,14 +74,15 @@
 
         /* Hover effect for logout button */
         .logout-btn:hover {
-            
+
             background-color: #c82333;
         }
 
         /* Style for profile link */
         .profile-link {
             color: #fff;
-            font-size: 24px; margin: 18px;
+            font-size: 24px;
+            margin: 18px;
         }
 
         /* Style for signup and signin links */
@@ -102,6 +104,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation bar -->
     <nav class="navbar">
@@ -109,16 +112,16 @@
             <li><a href="{% url 'hello_world' %}">Accueil</a></li>
             <!-- Check if user is authenticated -->
             {% if user.is_authenticated %}
-                <!-- Display link to profile -->
-                <li><a href="{% url 'user_profile' %}">Profil</a></li>
-                <!-- Display logout link -->
-                <li><a href="{% url 'logout' %}">Déconnexion</a></li>
+            <!-- Display link to profile -->
+            <li><a href="{% url 'user_profile' %}">Profil</a></li>
+            <!-- Display logout link -->
+            <li><a href="{% url 'logout' %}">Déconnexion</a></li>
             {% else %}
-                <!-- Display links for signup and signin when user is not authenticated -->
-                <li><a href="{% url 'signup' %}">Inscription</a></li>
-                <li><a href="{% url 'signin' %}">Connexion</a></li>
+            <!-- Display links for signup and signin when user is not authenticated -->
+            <li><a href="{% url 'signup' %}">Inscription</a></li>
+            <li><a href="{% url 'signin' %}">Connexion</a></li>
             {% endif %}
-           
+
         </ul>
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
@@ -133,28 +136,181 @@
                 <h5 class="card-title">Informations Utilisateur</h5>
                 <form method="post" action="{% url 'update_profile' %}">
                     {% csrf_token %}
+
+                    
                     <div class="form-group">
                         <label for="first_name">Prénom :</label>
-                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+                        <input type="text" class="form-control" id="first_name" name="first_name"
+                            value="{{ user.first_name }}">
                     </div>
                     <div class="form-group">
                         <label for="last_name">Nom :</label>
-                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+                        <input type="text" class="form-control" id="last_name" name="last_name"
+                            value="{{ user.last_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email :</label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                        value="{{ user.email }}">
                     </div>
                     <div class="form-group">
                         <label for="age">Âge :</label>
-                        <input type="number" class="form-control" id="age" name="age" value="{{ user.age }}">
+                        <input type="number" class="form-control" id="age" name="age" 
+                        value="{{ user.age }}">
                     </div>
                     <div class="form-group">
                         <label for="sexe">Sexe :</label>
-                        <select class="form-control" id="sexe" name="sexe">
-                            <option value="M" {% if user.sexe == 'M' %} selected {% endif %}>Masculin</option>
-                            <option value="F" {% if user.sexe == 'F' %} selected {% endif %}>Féminin</option>
-                        </select>
+                        <input type="text" class="form-control" id="sexe" name="sexe" 
+                        value="{{ user.sexe }}">
+                    </div>
+
+
+
+
+                    <div>
+                        <label for="treatment">Traitement :</label>
+                        <input type="checkbox" id="treatment" name="treatment">
+                    </div>
+
+                    <div>
+                        <label for="days_Indoors">Jours à l'intérieur :</label>
+                        <input type="number" id="days_Indoors" name="days_Indoors"
+                            value="{{ user.userinfo.days_Indoors }}">
+                    </div>
+                    <div>
+                        <label for="growing_Stress">Stress croissant :</label>
+                        <input type="number" id="growing_Stress" name="growing_Stress"
+                            value="{{ user.userinfo.growing_Stress }}">
+                    </div>
+                    <div>
+                        <label for="changes_habits">Changements d'habitudes :</label>
+                        <input type="number" id="changes_habits" name="changes_habits"
+                            value="{{ user.userinfo.changes_habits }}">
+                    </div>
+                    <div>
+                        <label for="mental_health_history">Antécédents de santé mentale :</label>
+                        <input type="checkbox" id="mental_health_history" name="mental_health_history">
+                    </div>
+                    <div>
+                        <label for="mood_swings">Changements d'humeur :</label>
+                        <input type="number" id="mood_swings" name="mood_swings"
+                            value="{{ user.userinfo.mood_swings }}">
+                    </div>
+                    <div>
+                        <label for="coping_struggles">Difficultés à faire face :</label>
+                        <input type="checkbox" id="coping_struggles" name="coping_struggles">
+                    </div>
+                    <div>
+                        <label for="work_interest">Intérêt pour le travail :</label>
+                        <input type="number" id="work_interest" name="work_interest"
+                            value="{{ user.userinfo.work_interest }}">
+                    </div>
+                    <div>
+                        <label for="social_weakness">Faiblesse sociale :</label>
+                        <input type="number" id="social_weakness" name="social_weakness"
+                            value="{{ user.userinfo.social_weakness }}">
+                    </div>
+                    <div>
+                        <label for="mental_health_interview">Entretien de santé mentale :</label>
+                        <input type="number" id="mental_health_interview" name="mental_health_interview"
+                            value="{{ user.userinfo.mental_health_interview }}">
+                    </div>
+                    <div>
+                        <label for="care_options">Options de soins :</label>
+                        <input type="number" id="care_options" name="care_options"
+                            value="{{ user.userinfo.care_options }}">
+                    </div>
+                    <div>
+                        <label for="family_history_obese">Antécédents familiaux d'obésité :</label>
+                        <input type="checkbox" id="family_history_obese" name="family_history_obese">
+                    </div>
+                    <div>
+                        <label for="FAVC">FAVC :</label>
+                        <input type="checkbox" id="FAVC" name="FAVC">
+                    </div>
+                    <div>
+                        <label for="FCVC">FCVC :</label>
+                        <input type="number" step="any" id="FCVC" name="FCVC" value="{{ user.userinfo.FCVC }}">
+                    </div>
+                    <div>
+                        <label for="NCP">NCP :</label>
+                        <input type="number" step="any" id="NCP" name="NCP" value="{{ user.userinfo.NCP }}">
+                    </div>
+                    <div>
+                        <label for="Occupation">Occupation :</label>
+                        <input type="text" id="Occupation" name="Occupation" value="{{ user.userinfo.Occupation }}">
+                    </div>
+                    <div>
+                        <label for="MTRANS">MTRANS :</label>
+                        <input type="text" id="MTRANS" name="MTRANS" value="{{ user.userinfo.MTRANS }}">
+                    </div>
+                    <div>
+                        <label for="CALC">CALC :</label>
+                        <input type="text" id="CALC" name="CALC" value="{{ user.userinfo.CALC }}">
+                    </div>
+                    <div>
+                        <label for="CAEF">CAEF :</label>
+                        <input type="text" id="CAEF" name="CAEF" value="{{ user.userinfo.CAEF }}">
+                    </div>
+                    <label for="SMOKE">Fumeur :</label>
+                    <input type="checkbox" id="SMOKE" name="SMOKE">
+                    <div>
+                        <label for="CH2O">CH2O :</label>
+                        <input type="number" step="any" id="CH2O" name="CH2O" value="{{ user.userinfo.CH2O }}">
+                    </div>
+                    <div>
+                        <label for="SCC">SCC :</label>
+                        <input type="checkbox" id="SCC" name="SCC">
+                        <input type="number" step="any"id="SCC" name="SCC" value="{{ user.userinfo.CH2O }}">
+                    </div>
+                    <div>
+                        <label for="FAF">FAF :</label>
+                        <input type="number" step="any" id="FAF" name="FAF" value="{{ user.userinfo.FAF }}">
+                    </div>
+                    <div>
+                        <label for="TUE">TUE :</label>
+                        <input type="checkbox" id="TUE" name="TUE">
+                    </div>
+                    <div>
+                        <label for="height">Taille :</label>
+                        <input type="number" id="height" name="height" value="{{ user.userinfo.height }}">
+                    </div>
+                    <div>
+                        <label for="weight">Poids :</label>
+                        <input type="number" id="weight" name="weight" value="{{ user.userinfo.weight }}">
+                    </div>
+                    <div>
+                        <label for="steps">Nombre de pas :</label>
+                        <input type="number" id="steps" name="steps" value="{{ user.userinfo.steps }}">
+                    </div>
+                    <div>
+                        <label for="sleep_duration">Durée de sommeil :</label>
+                        <input type="number" step="any" id="sleep_duration" name="sleep_duration"
+                            value="{{ user.userinfo.sleep_duration }}">
+                    </div>
+                    <div>
+                        <label for="sleep_quality">Qualité de sommeil :</label>
+                        <input type="number" id="sleep_quality" name="sleep_quality"
+                            value="{{ user.userinfo.sleep_quality }}">
+                    </div>
+                    <div>
+                        <label for="heart_rate">Rythme cardiaque :</label>
+                        <input type="number" id="heart_rate" name="heart_rate" value="{{ user.userinfo.heart_rate }}">
+                    </div>
+                    <div>
+                        <label for="BMI">IMC :</label>
+                        <input type="number" id="BMI" name="BMI" value="{{ user.userinfo.BMI }}">
+                    </div>
+                    <div>
+                        <label for="self_employed">Travailleur indépendant :</label>
+                        <input type="checkbox" id="self_employed" name="self_employed">
+                    </div>
+                    <div>
+                        <label for="family_history_stress">Antécédents familiaux de stress :</label>
+                        <input type="checkbox" id="family_history_stress" name="family_history_stress">
                     </div>
                     <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
                 </form>
             </div>
-            
         </div>
-    
+    </div>

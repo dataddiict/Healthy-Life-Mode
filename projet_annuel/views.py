@@ -61,22 +61,23 @@ def update_profile(request):
     if request.method == 'POST':
         form = UserProfileUpdateForm(request.POST)
         if form.is_valid():
-            # Update the user profile with form data
             user = request.user
-            user.first_name = form.cleaned_data['first_name']
-            user.last_name = form.cleaned_data['last_name']
-            user.age = form.cleaned_data['age']
-            user.sexe = form.cleaned_data['sexe']
+            user.first_name = form.cleaned_data.get('first_name')
+            user.last_name = form.cleaned_data.get('last_name')
+            user.email = form.cleaned_data.get('email')
+            user.age = form.cleaned_data.get('age')
+            user.sexe = form.cleaned_data.get('sexe')
             user.save()
-            return redirect('user_profile')  # Redirect to the profile page after updating
+            User.update_user(user.email, user.password, user.first_name, user.last_name, user.username, user.age, user.sexe)
+            return redirect('update_profile')
+        
     else:
-        form = UserProfileUpdateForm(initial={
-            'first_name': request.user.first_name,
-            'last_name': request.user.last_name,
-            'age': request.user.age,
-            'sexe': request.user.sexe,
-        })
-    return render(request, 'update_profile.html', {'form': form})
+        form = UserProfileUpdateForm()
+
+    context = {
+        'form': form
+    }
+    return render(request, 'update_profile.html', context)
 
 def logout_view(request):
     logout(request)

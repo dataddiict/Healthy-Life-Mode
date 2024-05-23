@@ -91,8 +91,14 @@ WSGI_APPLICATION = 'Back_end_PA.wsgi.application'
 }"""
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL', os.environ.get('DB_DATABASE_URL')))
-}
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),   
+        'PORT': os.environ.get('DB_PORT')
+    }   }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -132,7 +138,7 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-ALLOWED_HOSTS = ['healthy-life-mode.onrender.com']
+ALLOWED_HOSTS = ['healthy-life-mode.onrender.com', "localhost", "127.0.0.1"]
 CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
