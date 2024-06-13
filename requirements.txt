@@ -122,4 +122,4 @@ psycopg2-binary
 python-dotenv
 django-cors-headers
 dj-database-url
-sklearn
+scikit-learn
