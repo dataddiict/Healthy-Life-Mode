@@ -14,28 +14,24 @@ class User(models.Model):
     sexe = models.CharField(max_length=1, choices=[('M', 'Male'), ('F', 'Female')], null=True, blank=True)
     first_name = models.CharField(max_length=100, null=True, blank=True)
     last_name = models.CharField(max_length=100, null=True, blank=True)
-
+    height = models.IntegerField(null=True, blank=True)  # Nouveau champ
+    weight = models.IntegerField(null=True, blank=True)  # Nouveau champ
+    steps = models.IntegerField(null=True, blank=True)   # Nouveau champ
+    sleep_quality = models.IntegerField(null=True, blank=True)  # Nouveau champ
+    sleep_duration = models.IntegerField(null=True, blank=True)  # Nouveau champ
 
     @classmethod
     def create_user(cls, mail, password, first_name, last_name, username):
         try:
-            # Créer un nouvel utilisateur dans la table auth_user
             user = DjangoUser.objects.create_user(username=username, email=mail, password=password)
-            
-            # Mettre à jour les autres champs de l'utilisateur
             user.first_name = first_name
             user.last_name = last_name
-
             user.save()
-
             print("Utilisateur créé avec succès !")
             return user
-
         except Exception as error:
             print("Erreur lors de la création de l'utilisateur :", error)
             return None
-
-
     
     @classmethod
     def user_login(cls, mail, password):
@@ -58,19 +54,16 @@ class User(models.Model):
         return user
     
     @classmethod
-    def update_user(cls, mail, password, first_name, last_name, username, age, sexe):
+    def update_user(cls, mail, password, first_name, last_name, username, age, sexe, height, weight, steps, sleep_quality, sleep_duration):
         try:
-            # Recherche de l'utilisateur dans la table auth_user de Django
             user = DjangoUser.objects.get(email=mail)
-
-            # Mettre à jour les champs de l'utilisateur
             user.username = username
             user.email = mail
             user.set_password(password)
             user.first_name = first_name
             user.last_name = last_name
             user.save()
-            # requete sql
+
             conn = psycopg2.connect(
                 dbname=os.environ.get('DB_NAME'),
                 user=os.environ.get('DB_USER'),
@@ -80,16 +73,14 @@ class User(models.Model):
             )
             cursor = conn.cursor()
             cursor.execute(
-                f"UPDATE auth_user SET age = {age}, sexe = '{sexe}' WHERE id = {user.id}"
+                f"UPDATE auth_user SET age = {age}, sexe = '{sexe}', height = {height}, weight = {weight}, steps = {steps}, sleep_quality = {sleep_quality}, sleep_duration = {sleep_duration} WHERE id = {user.id}"
             )
             conn.commit()
             cursor.close()
             conn.close()
 
-
             print("Utilisateur mis à jour avec succès !")
             return user
-
         except Exception as error:
             print("Erreur lors de la mise à jour de l'utilisateur :", error)
             return None

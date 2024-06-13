@@ -56,7 +56,13 @@ class UserProfileUpdateForm(forms.Form):
     email = forms.EmailField(max_length=255, required=False)
     age = forms.IntegerField(required=False)
     sexe = forms.ChoiceField(choices=[('M', 'Male'), ('F', 'Female')], required=False)
+    height = forms.IntegerField(required=False)  # Nouveau champ
+    weight = forms.IntegerField(required=False)  # Nouveau champ
+    steps = forms.IntegerField(required=False)   # Nouveau champ
+    sleep_quality = forms.IntegerField(required=False)  # Nouveau champ
+    sleep_duration = forms.IntegerField(required=False)  # Nouveau champ
 
+@login_required
 def update_profile(request):
     if request.method == 'POST':
         form = UserProfileUpdateForm(request.POST)
@@ -67,13 +73,21 @@ def update_profile(request):
             user.email = form.cleaned_data.get('email')
             user.age = form.cleaned_data.get('age')
             user.sexe = form.cleaned_data.get('sexe')
+            user.height = form.cleaned_data.get('height')  # Nouveau champ
+            user.weight = form.cleaned_data.get('weight')  # Nouveau champ
+            user.steps = form.cleaned_data.get('steps')   # Nouveau champ
+            user.sleep_quality = form.cleaned_data.get('sleep_quality')  # Nouveau champ
+            user.sleep_duration = form.cleaned_data.get('sleep_duration')  # Nouveau champ
             user.save()
-            User.update_user(user.email, user.password, user.first_name, user.last_name, user.username, user.age, user.sexe)
-            return redirect('update_profile')
-        
+            User.update_user(user.email, user.password,
+                             user.first_name, user.last_name,
+                             user.username, user.age,
+                             user.sexe, user.height,
+                             user.weight, user.steps,
+                             user.sleep_quality, user.sleep_duration)
+            return redirect('hello_world')
     else:
         form = UserProfileUpdateForm()
-
     context = {
         'form': form
     }
