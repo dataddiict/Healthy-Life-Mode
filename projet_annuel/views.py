@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from .models import User
 from django.http import HttpResponse
-from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserChangeForm
-from django import forms
+from django.contrib.auth.models import User as DjangoUser
+from .models import UserProfile
 from django.contrib.auth import logout
+from django import forms
+from .models import User
 
 def connection(request):
     if request.method == 'POST':
@@ -27,67 +27,37 @@ def inscription(request):
         password = request.POST.get('password')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
-        user = User.create_user( mail, password, first_name, last_name, username)
-        if user:
-            pass
-        else:
-            pass
+        user = DjangoUser.objects.create_user(username=username, email=mail, password=password)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+        return redirect('signin')
     return render(request, 'signup.html')
 
 @login_required
 def user_profile(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    context = {
+        'user': request.user,
+        'profile': user_profile
+    }
+    return render(request, 'profile.html', context)
+
+class UserProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['age', 'sexe', 'height', 'weight', 'steps', 'sleep_quality', 'sleep_duration']
+
+@login_required
+def update_profile(request):
+    user_profile = UserProfile.objects.get(user=request.user)
     if request.method == 'POST':
-        form = UserChangeForm(request.POST, instance=request.user)
+        form = UserProfileUpdateForm(request.POST, instance=user_profile)
         if form.is_valid():
             form.save()
             return redirect('user_profile')
     else:
-        form = UserChangeForm(instance=request.user)
-
-    context = {
-        'user': request.user,
-        'form': form
-    }
-    return render(request, 'profile.html', context)
-
-class UserProfileUpdateForm(forms.Form):
-    first_name = forms.CharField(max_length=100, required=False)
-    last_name = forms.CharField(max_length=100, required=False)
-    email = forms.EmailField(max_length=255, required=False)
-    age = forms.IntegerField(required=False)
-    sexe = forms.ChoiceField(choices=[('M', 'Male'), ('F', 'Female')], required=False)
-    height = forms.IntegerField(required=False)  # Nouveau champ
-    weight = forms.IntegerField(required=False)  # Nouveau champ
-    steps = forms.IntegerField(required=False)   # Nouveau champ
-    sleep_quality = forms.IntegerField(required=False)  # Nouveau champ
-    sleep_duration = forms.IntegerField(required=False)  # Nouveau champ
-
-@login_required
-def update_profile(request):
-    if request.method == 'POST':
-        form = UserProfileUpdateForm(request.POST)
-        if form.is_valid():
-            user = request.user
-            user.first_name = form.cleaned_data.get('first_name')
-            user.last_name = form.cleaned_data.get('last_name')
-            user.email = form.cleaned_data.get('email')
-            user.age = form.cleaned_data.get('age')
-            user.sexe = form.cleaned_data.get('sexe')
-            user.height = form.cleaned_data.get('height')  # Nouveau champ
-            user.weight = form.cleaned_data.get('weight')  # Nouveau champ
-            user.steps = form.cleaned_data.get('steps')   # Nouveau champ
-            user.sleep_quality = form.cleaned_data.get('sleep_quality')  # Nouveau champ
-            user.sleep_duration = form.cleaned_data.get('sleep_duration')  # Nouveau champ
-            user.save()
-            User.update_user(user.email, user.password,
-                             user.first_name, user.last_name,
-                             user.username, user.age,
-                             user.sexe, user.height,
-                             user.weight, user.steps,
-                             user.sleep_quality, user.sleep_duration)
-            return redirect('hello_world')
-    else:
-        form = UserProfileUpdateForm()
+        form = UserProfileUpdateForm(instance=user_profile)
     context = {
         'form': form
     }
@@ -99,4 +69,3 @@ def logout_view(request):
 
 def hello_world(request):
     return render(request, 'index.html')
-

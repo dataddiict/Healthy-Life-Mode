@@ -132,28 +132,25 @@
     <div class="container">
         <h1>Profil Utilisateur</h1>
         <div class="card">
+
             <div class="card-body">
                 <h5 class="card-title">Informations Utilisateur</h5>
-                <form method="post" action="{% url 'update_profile' %}">
-                    {% csrf_token %}
-                    <form method="POST" action="{% url 'update_profile' %}">
-                        {% csrf_token %}
-                        <input type="text" name="first_name" placeholder="First Name" value="{{ form.first_name.value }}" required>
-                        <input type="text" name="last_name" placeholder="Last Name" value="{{ form.last_name.value }}" required>
-                        <input type="email" name="email" placeholder="Email" value="{{ form.email.value }}" required>
-                        <input type="number" name="age" placeholder="Age" value="{{ form.age.value }}">
-                        <select name="sexe">
-                            <option value="M" {% if form.sexe.value == "M" %}selected{% endif %}>Male</option>
-                            <option value="F" {% if form.sexe.value == "F" %}selected{% endif %}>Female</option>
-                        </select>
-                        <input type="number" name="height" placeholder="Height" value="{{ form.height.value }}">  <!-- Nouveau champ -->
-                        <input type="number" name="weight" placeholder="Weight" value="{{ form.weight.value }}">  <!-- Nouveau champ -->
-                        <input type="number" name="steps" placeholder="Steps per day" value="{{ form.steps.value }}">  <!-- Nouveau champ -->
-                        <input type="number" name="sleep_quality" placeholder="Sleep Quality" value="{{ form.sleep_quality.value }}">
-                        <input type="number" name="sleep_duration" placeholder="sleep_duration " value="{{ form.sleep_duration.value }}">
-                        <button type="submit">Update Profile</button>
-                    </form>
-                </form>
+                <p>Username: {{ user.username }}</p>
+                <p>Email: {{ user.email }}</p>
+                <p>First Name: {{ user.first_name }}</p>
+                <p>Last Name: {{ user.last_name }}</p>
+                <p>Age: {{ profile.age }}</p>
+                <p>Sexe: {{ profile.sexe }}</p>
+                <p>Height: {{ profile.height }}</p>
+                <p>Weight: {{ profile.weight }}</p>
+                <p>Steps: {{ profile.steps }}</p>
+                <p>Sleep Quality: {{ profile.sleep_quality }}</p>
+                <p>Sleep Duration: {{ profile.sleep_duration }}</p>
+                <a href="{% url 'update_profile' %}">Edit Profile</a>
+
+            </div>
+
+               
             </div>
         </div>
     </div>
