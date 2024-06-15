@@ -30,11 +30,15 @@ def create_user_profile(sender, instance, created, **kwargs):
 from django.db.models.signals import post_save
 post_save.connect(create_user_profile, sender=DjangoUser)
 
-def load_model(model_name='script python\sleep_disorder_model.joblib'):
-    return joblib.load(model_name)
+def load_model():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    model_path = os.path.join(current_dir, 'script python', 'sleep_disorder_model.joblib')
+    return joblib.load(model_path)
 
-def load_label_encoders(encoder_name='script python\label_encoders.joblib'):
-    return joblib.load(encoder_name)
+def load_label_encoders():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    model_path = os.path.join(current_dir, 'script python', 'label_encoders.joblib')
+    return joblib.load(model_path)
 
 
 def load_label_encoders():
