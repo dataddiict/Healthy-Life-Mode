@@ -18,12 +18,15 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR est déjà défini comme suit
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Chemin vers le répertoire contenant le modèle, en utilisant pathlib pour gérer les espaces
+MODEL_DIR = BASE_DIR / 'projet_annuel' / 'script python'
 
-# Chemin absolu vers le script Python
-MODEL_DIR = Path('~/project/src/projet_annuel/script python').expanduser().resolve()
+# Chemin vers le modèle
+MODEL_PATH = MODEL_DIR / 'sleep_disorder_model.joblib'
+
 
 # Chemin vers le modèle
 MODEL_SLEEP_PATH = MODEL_DIR / 'sleep_disorder_model.joblib'
