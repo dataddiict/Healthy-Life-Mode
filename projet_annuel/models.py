@@ -4,10 +4,14 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from django.contrib.auth.models import User as DjangoUser
+from django.conf import settings
 from dotenv import load_dotenv
 load_dotenv()
 import psycopg2
 import os
+
+model_sleep_path = settings.MODEL_SLEEP_PATH
+model_sleep_path_encode = settings.MODEL_SLEEP_PATH_ENCODE
 
 class UserProfile(models.Model):
     user = models.OneToOneField(DjangoUser, on_delete=models.CASCADE)
@@ -30,10 +34,10 @@ def create_user_profile(sender, instance, created, **kwargs):
 from django.db.models.signals import post_save
 post_save.connect(create_user_profile, sender=DjangoUser)
 
-def load_model(model_name='src\projet_annuel\script python\sleep_disorder_model.joblib'):
+def load_model(model_name=model_sleep_path):
     return joblib.load(model_name)
 
-def load_label_encoders(encoder_name='src\projet_annuel\script python\label_encoders.joblib'):
+def load_label_encoders(encoder_name=model_sleep_path_encode):
     return joblib.load(encoder_name)
 
 

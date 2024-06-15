@@ -22,6 +22,13 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+# Chemin absolu vers le script Python
+MODEL_DIR = Path('~/project/src/projet_annuel/script python').expanduser().resolve()
+
+# Chemin vers le modèle
+MODEL_SLEEP_PATH = MODEL_DIR / 'sleep_disorder_model.joblib'
+MODEL_SLEEP_PATH_ENCODE = MODEL_DIR / 'label_encoders.joblib'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
