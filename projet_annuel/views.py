@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User as DjangoUser
-from .models import UserProfile
-from django.contrib.auth import logout
+from .models import UserProfile, predict_sleep_disorder
 from django import forms
 from .models import User
 
@@ -46,7 +45,7 @@ def user_profile(request):
 class UserProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['age', 'sexe', 'height', 'weight', 'steps', 'sleep_quality', 'sleep_duration']
+        fields = ['age', 'sexe', 'height', 'weight', 'steps', 'sleep_quality', 'sleep_duration', 'physical_activity', 'stress_level']
 
 @login_required
 def update_profile(request):
@@ -62,6 +61,21 @@ def update_profile(request):
         'form': form
     }
     return render(request, 'update_profile.html', context)
+
+@login_required
+def predict_sleep_disorder_view(request):
+    user_id = request.user.id
+    prediction = predict_sleep_disorder(user_id)
+    
+    result = ''
+    if prediction == 0:
+        result = 'Pas de trouble du sommeil'
+    elif prediction == 1:
+        result = 'Apnée du sommeil'
+    elif prediction == 2:
+        result = 'Insomnie'
+    
+    return render(request, 'prediction_result.html', {'result': result})
 
 def logout_view(request):
     logout(request)

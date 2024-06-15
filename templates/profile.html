@@ -146,9 +146,17 @@
                 <p>Steps: {{ profile.steps }}</p>
                 <p>Sleep Quality: {{ profile.sleep_quality }}</p>
                 <p>Sleep Duration: {{ profile.sleep_duration }}</p>
+                <p>Physical activity level : {{ profile.physical_activity }} </p>
+                <p>Stress level : {{ profile.stress_level }} </p>
                 <a href="{% url 'update_profile' %}">Edit Profile</a>
 
             </div>
+                 <!--redict to predict -->
+            <div class="card-body">
+                <h5 class="card-title
+                ">Predictions</h5>
+                <a href="{% url 'predict_sleep_disorder' %}">Predict</a>
+
 
                
             </div>
