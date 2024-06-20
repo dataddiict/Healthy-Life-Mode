@@ -141,13 +141,13 @@
                 <p>Last Name: {{ user.last_name }}</p>
                 <p>Age: {{ profile.age }}</p>
                 <p>Sexe: {{ profile.sexe }}</p>
-                <p>Height: {{ profile.height }}</p>
-                <p>Weight: {{ profile.weight }}</p>
-                <p>Steps: {{ profile.steps }}</p>
-                <p>Sleep Quality: {{ profile.sleep_quality }}</p>
-                <p>Sleep Duration: {{ profile.sleep_duration }}</p>
-                <p>Physical activity level : {{ profile.physical_activity }} </p>
-                <p>Stress level : {{ profile.stress_level }} </p>
+                <p>Height: {{ profile.height }} en cm</p>
+                <p>Weight: {{ profile.weight }} en kg</p>
+                <p>Steps: {{ profile.steps }} par jour</p>
+                <p>Sleep Quality: {{ profile.sleep_quality }} 1-10</p>
+                <p>Sleep Duration: {{ profile.sleep_duration }} 1-10</p>
+                <p>Physical activity level : {{ profile.physical_activity }} 1-70</p>
+                <p>Stress level : {{ profile.stress_level }} 1-10</p>
                 <a href="{% url 'update_profile' %}">Edit Profile</a>
 
             </div>
