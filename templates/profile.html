@@ -45,14 +45,20 @@
         <div class="container mt-5">
         </div>
         <div class="container mt-5">
-            <h5 class="text-center">Analyser vos information !</h5>
-            <h6 class="text-center">Analyser vos information pour prédire les troubles de santé</h6>
+            <h5 class="text-center">Analyser vos informations !</h5>
+            <h6 class="text-center">Analyser vos informations pour prédire les troubles de santé</h6>
             <div class="text-center mt-5">
-                <a href="{% url 'predict_sleep_disorder' %}" class="btn btn-custom">Predict</a>
-                <!-- margin bottom-->
+                {% if profile.age and profile.sexe and profile.height and profile.weight and profile.steps and profile.sleep_quality and profile.sleep_duration and profile.physical_activity and profile.stress_level %}
+                    <a href="{% url 'predict_sleep_disorder' %}" class="btn btn-custom">Predict</a>
+                {% else %}
+                    <p class="text-danger">Veuillez compléter toutes les informations de votre profil pour utiliser la prédiction.
+                        <div class=" mt-4">
+                            <a href="{% url 'update_profile' %}" class="btn btn-custom">Mettez à jour vos information </a>
+                        </div>
+                    </p>
+                {% endif %}
                 <h1 class="mt-5"></h1>
             </div>
-
         </div>
     </div>
 
