@@ -13,10 +13,10 @@
             <h5 class="card-title">Informations Utilisateur</h5>
             <div class="row">
                 <div class="col-md-6">
-                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Pseudo:</strong> {{ user.username }}</p>
                     <p><strong>Email:</strong> {{ user.email }}</p>
-                    <p><strong>First Name:</strong> {{ user.first_name }}</p>
-                    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+                    <p><strong>FNom:</strong> {{ user.first_name }}</p>
+                    <p><strong>Nom de Famille:</strong> {{ user.last_name }}</p>
                     <div class=" mt-4">
                         <a href="{% url 'user_update' %}" class="btn btn-custom">Modifier Profile</a>
                     </div>
@@ -24,13 +24,13 @@
                 <div class="col-md-6">
                     <p><strong>Age:</strong> {{ profile.age }}</p>
                     <p><strong>Sexe:</strong> {{ profile.sexe }}</p>
-                    <p><strong>Height:</strong> {{ profile.height }} cm</p>
-                    <p><strong>Weight:</strong> {{ profile.weight }} kg</p>
-                    <p><strong>Steps:</strong> {{ profile.steps }} par jour</p>
-                    <p><strong>Sleep Quality:</strong> {{ profile.sleep_quality }} (1-10)</p>
-                    <p><strong>Sleep Duration:</strong> {{ profile.sleep_duration }} (1-10)</p>
-                    <p><strong>Physical Activity Level:</strong> {{ profile.physical_activity }} (1-70)</p>
-                    <p><strong>Stress Level:</strong> {{ profile.stress_level }} (1-10)</p>
+                    <p><strong>Taille:</strong> {{ profile.height }} cm</p>
+                    <p><strong>Poids:</strong> {{ profile.weight }} kg</p>
+                    <p><strong>Pas:</strong> {{ profile.steps }} par jour</p>
+                    <p><strong>Qualité du repos:</strong> {{ profile.sleep_quality }} (1-10)</p>
+                    <p><strong>durée de la nuit:</strong> {{ profile.sleep_duration }} (1-10)</p>
+                    <p><strong>Niveau d'activité Physiques:</strong> {{ profile.physical_activity }} (1-70)</p>
+                    <p><strong>Niveau de stress:</strong> {{ profile.stress_level }} (1-10)</p>
                     <div class=" mt-4">
                         <a href="{% url 'update_profile' %}" class="btn btn-custom">Modifier Info</a>
                     </div>

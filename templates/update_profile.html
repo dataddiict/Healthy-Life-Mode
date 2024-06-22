@@ -35,14 +35,6 @@
                             <h5 class="card-title">Informations Personnelles 1/4</h5>
 
                             <div class="form-group">
-                                {{ form.first_name.label_tag }}
-                                {{ form.first_name }}
-                            </div>
-                            <div class="form-group">
-                                {{ form.last_name.label_tag }}
-                                {{ form.last_name }}
-                            </div>
-                            <div class="form-group">
                                 {{ form.age.label_tag }}
                                 {{ form.age }}
                             </div>
@@ -59,15 +51,16 @@
                         <div class="card-body p-5">
                             <h5 class="card-title">Informations Physiques 2/4</h5>
                             <div class="form-group">
-                                {{ form.height.label_tag }}
+                                <p>Entrez votre taille en cm</p>
+                                
                                 {{ form.height }}
                             </div>
                             <div class="form-group">
-                                {{ form.weight.label_tag }}
+                               <p>Entrez votre poids en kg</p>
                                 {{ form.weight }}
                             </div>
                             <div class="form-group">
-                                {{ form.steps.label_tag }}
+                                <p>Entrez le nombre de pas que vous faites par jour</p>
                                 {{ form.steps }}
                             </div>
                         </div>
@@ -79,11 +72,11 @@
                         <div class="card-body p-5">
                             <h5 class="card-title">Qualité du Sommeil 3/4</h5>
                             <div class="form-group">
-                                {{ form.sleep_quality.label_tag }}
+                                <p>Entrez la qualité de votre sommeil de 1 a 10, comment vous vous sentez au réveil</p>
                                 {{ form.sleep_quality }}
                             </div>
                             <div class="form-group">
-                                {{ form.sleep_duration.label_tag }}
+                                <p>Entrez la durée de votre sommeil de 1 a 10 heure</p>
                                 {{ form.sleep_duration }}
                             </div>
                         </div>
@@ -95,14 +88,14 @@
                         <div class="card-body p-5">
                             <h5 class="card-title">Activités et Stress 4/4</h5>
                             <div class="form-group">
-                                {{ form.physical_activity.label_tag }}
+                                <p>Entrez votre niveau d'activité physique de 1 a 65</p>
                                 {{ form.physical_activity }}
                             </div>
                             <div class="form-group">
-                                {{ form.stress_level.label_tag }}
+                                <p>Entrez votre niveau de stress de 1 a 10</p>
                                 {{ form.stress_level }}
                             </div>
-                            <button type="submit" class="btn btn-custom">Save Changes</button>
+                           
                         </div>
                     </div>
                 </div>
@@ -118,7 +111,8 @@
    
 
         <div class="text-center mt-4">
-            <a href="{% url 'user_profile' %}" class="btn btn-custom">Cancel</a>
+            <button type="submit" class="btn btn-custom">Sauvergarder</button>
+            <a href="{% url 'user_profile' %}" class="btn btn-custom">Abandonner</a>
 
         </div>
     </form>
