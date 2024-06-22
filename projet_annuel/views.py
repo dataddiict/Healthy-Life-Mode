@@ -5,7 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User as DjangoUser
 from .models import UserProfile, predict_sleep_disorder
 from django import forms
-from .models import User, getunbr_user
+from .models import User, getunbr_user, UserUpdateForm
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib import messages
 
 
 def connection(request):
@@ -42,6 +45,24 @@ def user_profile(request):
         'profile': user_profile
     }
     return render(request, 'profile.html', context)
+
+
+@login_required
+def update_user(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Your account has been updated!')
+            return redirect('user_profile')
+    else:
+        form = UserUpdateForm(instance=request.user)
+    context = {
+        'form': form
+    }
+    return render(request, 'update_user.html', context)
+
+        
 
 class UserProfileUpdateForm(forms.ModelForm):
     class Meta:

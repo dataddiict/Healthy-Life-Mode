@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from django.contrib.auth.models import User as DjangoUser
+from django import forms
+from django.contrib.auth.models import User
 from django.conf import settings
 from dotenv import load_dotenv
 load_dotenv()
@@ -12,6 +14,28 @@ import os
 
 model_sleep_path = settings.MODEL_SLEEP_PATH
 model_sleep_path_encode = settings.MODEL_SLEEP_PATH_ENCODE
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+
+    @classmethod
+    def update_user_django(cls, mail, password, first_name, last_name, username):
+        try:
+            user = User.objects.get(email=mail)
+            user.username = username
+            user.email = mail
+            user.set_password(password)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+            print("Utilisateur mis à jour avec succès !")
+            return user
+        except Exception as error:
+            print("Erreur lors de la mise à jour de l'utilisateur :", error)
+            return None
 
 class UserProfile(models.Model):
     user = models.OneToOneField(DjangoUser, on_delete=models.CASCADE)
@@ -165,6 +189,21 @@ class User(models.Model):
         return user
     
     @classmethod
+    def update_django_user(cls, mail, password, first_name, last_name, username):
+        try:
+            user = DjangoUser.objects.get(email=mail)
+            user.username = username
+            user.email = mail
+            user.set_password(password)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+            print("Utilisateur mis à jour avec succès !")
+            return user
+        except Exception as error:
+            print("Erreur lors de la mise à jour de l'utilisateur :", error)
+            return None
+    @classmethod    
     def update_user(cls, mail, password, first_name, last_name, username, age, sexe, height, weight, steps, sleep_quality, sleep_duration, physical_activity, stress_level):
         try:
             user = DjangoUser.objects.get(email=mail)

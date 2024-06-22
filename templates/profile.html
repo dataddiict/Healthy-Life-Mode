@@ -17,10 +17,13 @@
                     <p><strong>Email:</strong> {{ user.email }}</p>
                     <p><strong>First Name:</strong> {{ user.first_name }}</p>
                     <p><strong>Last Name:</strong> {{ user.last_name }}</p>
-                    <p><strong>Age:</strong> {{ profile.age }}</p>
-                    <p><strong>Sexe:</strong> {{ profile.sexe }}</p>
+                    <div class="text-center mt-4">
+                        <a href="{% url 'user_update' %}" class="btn btn-custom">Modifier Profile</a>
+                    </div>
                 </div>
                 <div class="col-md-6">
+                    <p><strong>Age:</strong> {{ profile.age }}</p>
+                    <p><strong>Sexe:</strong> {{ profile.sexe }}</p>
                     <p><strong>Height:</strong> {{ profile.height }} cm</p>
                     <p><strong>Weight:</strong> {{ profile.weight }} kg</p>
                     <p><strong>Steps:</strong> {{ profile.steps }} par jour</p>
@@ -28,11 +31,12 @@
                     <p><strong>Sleep Duration:</strong> {{ profile.sleep_duration }} (1-10)</p>
                     <p><strong>Physical Activity Level:</strong> {{ profile.physical_activity }} (1-70)</p>
                     <p><strong>Stress Level:</strong> {{ profile.stress_level }} (1-10)</p>
+                    <div class="text-center mt-4">
+                        <a href="{% url 'update_profile' %}" class="btn btn-custom">Modifier Info</a>
+                    </div>
                 </div>
             </div>
-            <div class="text-center mt-4">
-                <a href="{% url 'update_profile' %}" class="btn btn-custom">Edit Profile</a>
-            </div>
+
         </div>
         <div class="container mt-5">
             <h5 class="text-center">Analyser vos information !</h5>
