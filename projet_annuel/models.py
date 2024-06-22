@@ -201,7 +201,6 @@ class User_User(models.Model):
     
     @classmethod
     def user_login(cls, mail, password):
-        user = None
         try:
             user = DjangoUser.objects.get(email=mail)
             if user.check_password(password):
@@ -209,11 +208,14 @@ class User_User(models.Model):
                 return user
             else:
                 print("Mot de passe incorrect !")
+                return None
         except DjangoUser.DoesNotExist:
             print("Utilisateur non trouvé !")
+            return None
         except Exception as error:
             print("Erreur lors de la connexion de l'utilisateur :", error)
-        return user
+            return None
+
     
     @classmethod
     def update_django_user(cls, mail, password, first_name, last_name, username):
