@@ -7,7 +7,7 @@
 <div class="container mt-5">
     <h1 class="text-center mt-5">Bienvenue sur votre profil {{ user.first_name }} {{ user.last_name }}</h1>
     <h5 class="text-center mt-5">Ici vous pouvez modfifier quelque information sur votre profil si elle sont incorrecte ou non renseigné</h5>
-    <div class="text-center mt-5">
+    <div class="text-left mt-5">
     <div class="card">
         <div class="container mt-5">
             <h5 class="card-title">Informations Utilisateur</h5>
@@ -17,7 +17,7 @@
                     <p><strong>Email:</strong> {{ user.email }}</p>
                     <p><strong>First Name:</strong> {{ user.first_name }}</p>
                     <p><strong>Last Name:</strong> {{ user.last_name }}</p>
-                    <div class="text-center mt-4">
+                    <div class=" mt-4">
                         <a href="{% url 'user_update' %}" class="btn btn-custom">Modifier Profile</a>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                     <p><strong>Sleep Duration:</strong> {{ profile.sleep_duration }} (1-10)</p>
                     <p><strong>Physical Activity Level:</strong> {{ profile.physical_activity }} (1-70)</p>
                     <p><strong>Stress Level:</strong> {{ profile.stress_level }} (1-10)</p>
-                    <div class="text-center mt-4">
+                    <div class=" mt-4">
                         <a href="{% url 'update_profile' %}" class="btn btn-custom">Modifier Info</a>
                     </div>
                 </div>
