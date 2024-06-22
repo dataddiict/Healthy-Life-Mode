@@ -104,3 +104,9 @@ p, h1, h2, h3, h4, h5, h6, a, div, span, li, ul, ol, table, td, th, nav, button 
 a.nav-link {
     color: #ffffff !important; /* Blanc */
 }
+
+.card {
+    background: rgba(0, 0, 0, 0.219);
+    border-radius: 18px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

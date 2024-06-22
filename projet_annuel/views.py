@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User as DjangoUser
 from .models import UserProfile, predict_sleep_disorder
 from django import forms
-from .models import User
+from .models import User, getunbr_user
+
 
 def connection(request):
     if request.method == 'POST':
@@ -82,7 +83,8 @@ def logout_view(request):
     return redirect('hello_world')
 
 def hello_world(request):
-    return render(request, 'index.html')
+    user_count = getunbr_user()
+    return render(request, 'index.html', {'user_count': user_count})
 
 from django.shortcuts import render
 from .models import Image, Service
