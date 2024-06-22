@@ -9,7 +9,7 @@ from .models import User_User, getunbr_user, UserUpdateForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib import messages
-
+from .models import UserProfile, FollowDataUser
 
 def connection(request):
     if request.method == 'POST':
@@ -40,9 +40,12 @@ def inscription(request):
 @login_required
 def user_profile(request):
     user_profile = UserProfile.objects.get(user=request.user)
+    users = request.user
+    history = FollowDataUser.objects.filter(user=users).order_by('updated_at')
     context = {
         'user': request.user,
-        'profile': user_profile
+        'profile': user_profile,
+        'history': history
     }
     return render(request, 'profile.html', context)
 
@@ -106,7 +109,6 @@ def predict_sleep_disorder_view(request):
         'message': message
     }
     return render(request, 'prediction_result.html', context)
-    return render(request, 'prediction_result.html', {'result': result})
 
 def logout_view(request):
     logout(request)

@@ -15,6 +15,18 @@ import os
 model_sleep_path = settings.MODEL_SLEEP_PATH
 model_sleep_path_encode = settings.MODEL_SLEEP_PATH_ENCODE
 
+class FollowDataUser(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    age = models.IntegerField(null=True, blank=True)
+    sexe = models.CharField(max_length=1, choices=[('M', 'Male'), ('F', 'Female')], null=True, blank=True)
+    height = models.IntegerField(null=True, blank=True)
+    weight = models.IntegerField(null=True, blank=True)
+    steps = models.IntegerField(null=True, blank=True)
+    sleep_quality = models.IntegerField(null=True, blank=True)
+    sleep_duration = models.IntegerField(null=True, blank=True)
+    physical_activity = models.IntegerField(null=True, blank=True)
+    stress_level = models.IntegerField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:
@@ -142,8 +154,23 @@ def predict_sleep_disorder(user_id):
     features = preprocess_user_data(user_profile)
     
     # Faire la prédiction
-    prediction = model.predict([features])
-    return prediction[0]
+    prediction = model.predict([features])[0]
+    
+    # Enregistrer les données dans FollowDataUser
+    FollowDataUser.objects.create(
+        user=user_profile.user,
+        age=user_profile.age,
+        sexe=user_profile.sexe,
+        height=user_profile.height,
+        weight=user_profile.weight,
+        steps=user_profile.steps,
+        sleep_quality=user_profile.sleep_quality,
+        sleep_duration=user_profile.sleep_duration,
+        physical_activity=user_profile.physical_activity,
+        stress_level=user_profile.stress_level
+    )
+    
+    return prediction
 
 class User_User(models.Model):
     pseudo = models.CharField(max_length=100)

@@ -55,6 +55,83 @@
 
         </div>
     </div>
+
+    <div class="container mt-5">
+        <div class="card">
+            <h5 class="card-title p-3">Historique des Données
+            </h5>
+            <canvas id="userProfileChart" width="400" height="200"></canvas>
+        </div>
+    </div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var ctx = document.getElementById('userProfileChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [{% for entry in history %}'{{ entry.updated_at|date:"Y-m-d" }}',{% endfor %}],
+                datasets: [
+                    {
+                        label: 'Steps',
+                        data: [{% for entry in history %}{{ entry.steps }},{% endfor %}],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: false,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Sleep Quality',
+                        data: [{% for entry in history %}{{ entry.sleep_quality }},{% endfor %}],
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        fill: false,
+                        yAxisID: 'y1'
+                    },
+                    {
+                        label: 'Sleep Duration',
+                        data: [{% for entry in history %}{{ entry.sleep_duration }},{% endfor %}],
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                        fill: false,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Steps'
+                        }
+                    },
+                    y1: {
+                        beginAtZero: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Sleep'
+                        },
+                        grid: {
+                            drawOnChartArea: false // only want the grid lines for one axis to show up
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}
