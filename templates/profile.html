@@ -5,29 +5,46 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center">Profil Utilisateur</h1>
-    <div class="card mt-4">
-        <div class="card-body">
+    <h1 class="text-center mt-5">Bienvenue sur votre profil {{ user.first_name }} {{ user.last_name }}</h1>
+    <h5 class="text-center mt-5">Ici vous pouvez modfifier quelque information sur votre profil si elle sont incorrecte ou non renseigné</h5>
+    <div class="text-center mt-5">
+    <div class="card">
+        <div class="container mt-5">
             <h5 class="card-title">Informations Utilisateur</h5>
-            <p>Username: {{ user.username }}</p>
-            <p>Email: {{ user.email }}</p>
-            <p>First Name: {{ user.first_name }}</p>
-            <p>Last Name: {{ user.last_name }}</p>
-            <p>Age: {{ profile.age }}</p>
-            <p>Sexe: {{ profile.sexe }}</p>
-            <p>Height: {{ profile.height }} (en cm)</p>
-            <p>Weight: {{ profile.weight }} (en kg)</p>
-            <p>Steps: {{ profile.steps }} (par jour)</p>
-            <p>Sleep Quality: {{ profile.sleep_quality }} (1-10)</p>
-            <p>Sleep Duration: {{ profile.sleep_duration }} (1-10)</p>
-            <p>Physical Activity Level: {{ profile.physical_activity }} (1-70)</p>
-            <p>Stress Level: {{ profile.stress_level }} (1-10)</p>
-            <a href="{% url 'update_profile' %}" class="btn btn-custom">Edit Profile</a>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>First Name:</strong> {{ user.first_name }}</p>
+                    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+                    <p><strong>Age:</strong> {{ profile.age }}</p>
+                    <p><strong>Sexe:</strong> {{ profile.sexe }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Height:</strong> {{ profile.height }} cm</p>
+                    <p><strong>Weight:</strong> {{ profile.weight }} kg</p>
+                    <p><strong>Steps:</strong> {{ profile.steps }} par jour</p>
+                    <p><strong>Sleep Quality:</strong> {{ profile.sleep_quality }} (1-10)</p>
+                    <p><strong>Sleep Duration:</strong> {{ profile.sleep_duration }} (1-10)</p>
+                    <p><strong>Physical Activity Level:</strong> {{ profile.physical_activity }} (1-70)</p>
+                    <p><strong>Stress Level:</strong> {{ profile.stress_level }} (1-10)</p>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="{% url 'update_profile' %}" class="btn btn-custom">Edit Profile</a>
+            </div>
         </div>
-        <div class="card-body">
-            <h5 class="card-title">Predictions</h5>
-            <a href="{% url 'predict_sleep_disorder' %}" class="btn btn-custom">Predict</a>
+        <div class="container mt-5">
+            <h5 class="text-center">Analyser vos information !</h5>
+            <h6 class="text-center">Analyser vos information pour prédire les troubles de santé</h6>
+            <div class="text-center mt-5">
+                <a href="{% url 'predict_sleep_disorder' %}" class="btn btn-custom">Predict</a>
+                <!-- margin bottom-->
+                <h1 class="mt-5"></h1>
+            </div>
+
         </div>
     </div>
 </div>
+
 {% endblock %}

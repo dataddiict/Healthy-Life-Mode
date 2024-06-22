@@ -114,3 +114,27 @@ a.nav-link {
     width: 50px;
     margin-right: 10px;
 }
+
+/* Custom button styles */
+.btn-custom {
+    background-color: #182f21; /* Custom button background color */
+    color: #ffffff; /* Button text color */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: #699872; /* Button hover color */
+}
+
+/* Custom card styles */
+.card-custom {
+    background-color: rgba(255, 255, 255, 0.8); /* White with slight transparency */
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
