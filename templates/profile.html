@@ -1,164 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Utilisateur</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* Style for the main heading */
-        h1 {
-            font-family: 'Arial', sans-serif;
-            font-size: 42px;
-            text-align: center;
-            color: #ffffff;
-            margin: -2px;
-        }
+{% block title %}Profil Utilisateur{% endblock %}
 
-        /* Style for the secondary heading */
-        h2 {
-            font-family: 'Arial', sans-serif;
-            font-size: 24px;
-            text-align: center;
-            margin-top: 20px;
-            color: #666;
-        }
-
-        /* Style for the top menu bar */
-        nav {
-            background: linear-gradient(to right, #e211d8, #a751ee);
-            color: #fff;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: 'Arial', sans-serif;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-
-        /* Style for the menu items */
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-
-        /* Style for menu item links */
-        nav ul li {
-            margin-right: 20px;
-        }
-
-        /* Style for menu item links */
-        nav ul li a {
-            text-decoration: none;
-            color: #fff;
-            font-size: 24px;
-        }
-
-        /* Style for logout button */
-        .logout-btn {
-            background-color: #61575d;
-            color: #fff;
-            border: none;
-            padding: 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 24px;
-            transition: background-color 0.3s;
-            align-items: right;
-        }
-
-        /* Hover effect for logout button */
-        .logout-btn:hover {
-
-            background-color: #c82333;
-        }
-
-        /* Style for profile link */
-        .profile-link {
-            color: #fff;
-            font-size: 24px;
-            margin: 18px;
-        }
-
-        /* Style for signup and signin links */
-        .signup-signin-links {
-            display: flex;
-            font-size: 24px;
-        }
-
-        /* Style for signup and signin links */
-        .signup-signin-links li {
-            margin-right: 20px;
-        }
-
-        /* Style for signup and signin links */
-        .signup-signin-links li a {
-            text-decoration: none;
-            color: #fff;
-            font-size: 24px;
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Navigation bar -->
-    <nav class="navbar">
-        <ul>
-            <li><a href="{% url 'hello_world' %}">Accueil</a></li>
-            <!-- Check if user is authenticated -->
-            {% if user.is_authenticated %}
-            <!-- Display link to profile -->
-            <li><a href="{% url 'user_profile' %}">Profil</a></li>
-            <!-- Display logout link -->
-            <li><a href="{% url 'logout' %}">Déconnexion</a></li>
-            {% else %}
-            <!-- Display links for signup and signin when user is not authenticated -->
-            <li><a href="{% url 'signup' %}">Inscription</a></li>
-            <li><a href="{% url 'signin' %}">Connexion</a></li>
-            {% endif %}
-
-        </ul>
-        <form action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="logout-btn">Déconnexion</button>
-        </form>
-    </nav>
-
-    <div class="container">
-        <h1>Profil Utilisateur</h1>
-        <div class="card">
-
-            <div class="card-body">
-                <h5 class="card-title">Informations Utilisateur</h5>
-                <p>Username: {{ user.username }}</p>
-                <p>Email: {{ user.email }}</p>
-                <p>First Name: {{ user.first_name }}</p>
-                <p>Last Name: {{ user.last_name }}</p>
-                <p>Age: {{ profile.age }}</p>
-                <p>Sexe: {{ profile.sexe }}</p>
-                <p>Height: {{ profile.height }} (en cm)</p>
-                <p>Weight: {{ profile.weight }} (en kg)</p>
-                <p>Steps: {{ profile.steps }} (par jour)</p>
-                <p>Sleep Quality: {{ profile.sleep_quality }} (1-10)</p>
-                <p>Sleep Duration: {{ profile.sleep_duration }} (1-10)</p>
-                <p>Physical activity level : {{ profile.physical_activity }} (1-70)</p>
-                <p>Stress level : {{ profile.stress_level }} (1-10)</p>
-                <a href="{% url 'update_profile' %}">Edit Profile</a>
-
-            </div>
-                 <!--redict to predict -->
-            <div class="card-body">
-                <h5 class="card-title
-                ">Predictions</h5>
-                <a href="{% url 'predict_sleep_disorder' %}">Predict</a>
-
-
-               
-            </div>
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Profil Utilisateur</h1>
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Informations Utilisateur</h5>
+            <p>Username: {{ user.username }}</p>
+            <p>Email: {{ user.email }}</p>
+            <p>First Name: {{ user.first_name }}</p>
+            <p>Last Name: {{ user.last_name }}</p>
+            <p>Age: {{ profile.age }}</p>
+            <p>Sexe: {{ profile.sexe }}</p>
+            <p>Height: {{ profile.height }} (en cm)</p>
+            <p>Weight: {{ profile.weight }} (en kg)</p>
+            <p>Steps: {{ profile.steps }} (par jour)</p>
+            <p>Sleep Quality: {{ profile.sleep_quality }} (1-10)</p>
+            <p>Sleep Duration: {{ profile.sleep_duration }} (1-10)</p>
+            <p>Physical Activity Level: {{ profile.physical_activity }} (1-70)</p>
+            <p>Stress Level: {{ profile.stress_level }} (1-10)</p>
+            <a href="{% url 'update_profile' %}" class="btn btn-custom">Edit Profile</a>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Predictions</h5>
+            <a href="{% url 'predict_sleep_disorder' %}" class="btn btn-custom">Predict</a>
         </div>
     </div>
+</div>
+{% endblock %}
