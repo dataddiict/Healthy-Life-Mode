@@ -8,8 +8,8 @@
     <h1 class="text-center">Update User</h1>
     <form method="post">
         {% csrf_token %}
-        <div class="card mt-4 card-custom">
-            <div class="card-body">
+        <div class="card">
+            <div class="container mt-5">
                 <h5 class="card-title">Informations Personnelles</h5>
                 <div class="form-group">
                     <label for="{{ form.username.id_for_label }}">Username</label>
@@ -31,8 +31,8 @@
         </div>
 
         <div class="text-center mt-4">
-            <a href="{% url 'user_profile' %}" class="btn btn-secondary">Cancel</a>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{% url 'user_profile' %}" class="btn btn-custom">Cancel</a>
+            <button type="submit" class="btn btn-custom">Save Changes</button>
         </div>
     </form>
 </div>
