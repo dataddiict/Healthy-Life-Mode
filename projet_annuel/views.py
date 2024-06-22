@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User as DjangoUser
 from .models import UserProfile, predict_sleep_disorder
 from django import forms
-from .models import User, getunbr_user, UserUpdateForm
+from .models import User_User, getunbr_user, UserUpdateForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib import messages
@@ -15,7 +15,7 @@ def connection(request):
     if request.method == 'POST':
         mail = request.POST.get('email')
         password = request.POST.get('password')
-        user = User.user_login(mail, password)
+        user = User_User.user_login(mail, password)
         if user is not None:
             login(request, user)
             return redirect('user_profile')

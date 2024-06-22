@@ -145,7 +145,7 @@ def predict_sleep_disorder(user_id):
     prediction = model.predict([features])
     return prediction[0]
 
-class User(models.Model):
+class User_User(models.Model):
     pseudo = models.CharField(max_length=100)
     mail = models.EmailField(max_length=255)
     password = models.CharField(max_length=255)
