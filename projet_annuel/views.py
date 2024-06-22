@@ -90,13 +90,22 @@ def predict_sleep_disorder_view(request):
     prediction = predict_sleep_disorder(user_id)
     
     result = ''
+    message = ''
     if prediction == 0:
         result = 'Pas de trouble du sommeil'
+        message = 'Félicitations ! Vous n\'avez pas de troubles du sommeil. Continuez à maintenir une bonne hygiène de sommeil.'
     elif prediction == 1:
         result = 'Apnée du sommeil'
+        message = 'Nous avons détecté des signes d\'apnée du sommeil. Il est recommandé de consulter un professionnel de la santé.'
     elif prediction == 2:
         result = 'Insomnie'
-    
+        message = 'Les résultats indiquent que vous pourriez souffrir d\'insomnie. Essayez de suivre des routines de sommeil régulières et évitez les écrans avant de dormir.'
+
+    context = {
+        'result': result,
+        'message': message
+    }
+    return render(request, 'prediction_result.html', context)
     return render(request, 'prediction_result.html', {'result': result})
 
 def logout_view(request):

@@ -1,12 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Prediction Result</title>
-</head>
-<body>
-    <h2>Prediction Result</h2>
-    <p>{{ result }}</p>
-    <a href="{% url 'user_profile' %}">Back to Profile</a>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Résultat de Prédiction{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body text-center">
+            <h2 class="card-title">Résultat de la Prédiction</h2>
+            <p class="card-text display-4">{{ result }}</p>
+            <p class="card-text">{{ message }}</p>
+            <a href="{% url 'user_profile' %}" class="btn btn-custom mt-3">Retour au Profil</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
