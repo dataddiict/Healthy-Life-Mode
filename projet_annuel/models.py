@@ -195,3 +195,19 @@ class User(models.Model):
         except Exception as error:
             print("Erreur lors de la mise à jour de l'utilisateur :", error)
             return None
+
+
+class Image(models.Model):
+    title = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='images/')
+
+    def __str__(self):
+        return self.title
+    
+class Service(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    image = models.ImageField(upload_to='services/')
+
+    def __str__(self):
+        return self.title

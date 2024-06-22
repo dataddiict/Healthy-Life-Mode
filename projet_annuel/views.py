@@ -83,3 +83,12 @@ def logout_view(request):
 
 def hello_world(request):
     return render(request, 'index.html')
+
+from django.shortcuts import render
+from .models import Image, Service
+
+def home(request):
+    images = Image.objects.all()
+    services = Service.objects.all()
+    return render(request, 'index.html', {'images': images, 'services': services})
+
