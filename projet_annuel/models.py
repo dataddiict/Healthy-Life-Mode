@@ -11,9 +11,18 @@ from dotenv import load_dotenv
 load_dotenv()
 import psycopg2
 import os
+import pickle
+from django.shortcuts import get_object_or_404
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
 
 model_sleep_path = settings.MODEL_SLEEP_PATH
 model_sleep_path_encode = settings.MODEL_SLEEP_PATH_ENCODE
+model_obesity_path = settings.MODEL_OBESITY_PATH
+model_obesity_path_encode = settings.MODEL_OBESITY_PATH_ENCODE
+model_obesity_path_preprocess = settings.MODEL_OBESITY_PATH_PREPROCESS
 
 class FollowDataUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -27,7 +36,18 @@ class FollowDataUser(models.Model):
     physical_activity = models.IntegerField(null=True, blank=True)
     stress_level = models.IntegerField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-
+    family_history_with_overweight = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
+    favc = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
+    caec = models.CharField(max_length=10, choices=[('no', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], null=True, blank=True)
+    smoke = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
+    scc = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
+    calc = models.CharField(max_length=10, choices=[('no', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], null=True, blank=True)
+    mtrans = models.CharField(max_length=21, choices=[('Walking', 'Walking'), ('Bike', 'Bike'), ('Public_Transportation', 'Public_Transportation'), ('Automobile', 'Automobile')], null=True, blank=True)
+    faf = models.FloatField(null=True, blank=True)
+    tue = models.FloatField(null=True, blank=True)
+    ch2o = models.FloatField(null=True, blank=True)
+    fcvc = models.FloatField(null=True, blank=True)
+    ncp = models.FloatField(null=True, blank=True)
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
@@ -60,6 +80,18 @@ class UserProfile(models.Model):
     sleep_duration = models.FloatField(null=True, blank=True)
     stress_level = models.IntegerField(null=True, blank=True)
     physical_activity = models.IntegerField(null=True, blank=True)
+    family_history_with_overweight = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
+    favc = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
+    caec = models.CharField(max_length=10, choices=[('no', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], null=True, blank=True)
+    smoke = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
+    scc = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
+    calc = models.CharField(max_length=10, choices=[('no', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], null=True, blank=True)
+    mtrans = models.CharField(max_length=21, choices=[('Walking', 'Walking'), ('Bike', 'Bike'), ('Public_Transportation', 'Public_Transportation'), ('Automobile', 'Automobile')], null=True, blank=True)
+    faf = models.FloatField(null=True, blank=True)
+    tue = models.FloatField(null=True, blank=True)
+    ch2o = models.FloatField(null=True, blank=True)
+    fcvc = models.FloatField(null=True, blank=True)
+    ncp = models.FloatField(null=True, blank=True)    
     def __str__(self):
         return self.user.username
 
@@ -185,7 +217,20 @@ class User_User(models.Model):
     steps = models.IntegerField(null=True, blank=True)
     sleep_quality = models.IntegerField(null=True, blank=True)
     sleep_duration = models.IntegerField(null=True, blank=True)
-
+    stress_level = models.IntegerField(null=True, blank=True)
+    physical_activity = models.IntegerField(null=True, blank=True)
+    family_history_with_overweight = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
+    favc = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
+    caec = models.CharField(max_length=10, choices=[('no', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], null=True, blank=True)
+    smoke = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
+    scc = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
+    calc = models.CharField(max_length=10, choices=[('no', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], null=True, blank=True)
+    mtrans = models.CharField(max_length=21, choices=[('Walking', 'Walking'), ('Bike', 'Bike'), ('Public_Transportation', 'Public_Transportation'), ('Automobile', 'Automobile')], null=True, blank=True)
+    faf = models.FloatField(null=True, blank=True)
+    tue = models.FloatField(null=True, blank=True)
+    ch2o = models.FloatField(null=True, blank=True)
+    fcvc = models.FloatField(null=True, blank=True)
+    ncp = models.FloatField(null=True, blank=True)
     @classmethod
     def create_user(cls, mail, password, first_name, last_name, username):
         try:
@@ -294,3 +339,88 @@ def getunbr_user():
     cursor.close()
     conn.close()
     return unbr_user[0]
+
+
+class ObesityPrediction(models.Model):
+    user = models.ForeignKey(DjangoUser, on_delete=models.CASCADE)
+    prediction = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+def load_model_obesity():
+    with open(model_obesity_path, 'rb') as file:
+        return pickle.load(file)
+def load_label_encoder():
+    with open(model_obesity_path_encode, 'rb') as file:
+        return pickle.load(file)
+def preprocess_user_data_ob(user_profile):
+    # Step 1: Load User Data
+    gender_map = {'M': 'Male', 'F': 'Female'}
+    gender = gender_map.get(user_profile.sexe, user_profile.sexe)
+    
+    data = {
+        'Gender': [gender],
+        'family_history_with_overweight': [user_profile.family_history_with_overweight],
+        'FAVC': [user_profile.favc],
+        'CAEC': [user_profile.caec],
+        'SMOKE': [user_profile.smoke],
+        'SCC': [user_profile.scc],
+        'CALC': [user_profile.calc],
+        'MTRANS': [user_profile.mtrans],
+        'FAF': [user_profile.faf],
+        'TUE': [user_profile.tue],
+        'CH2O': [user_profile.ch2o],
+        'FCVC': [user_profile.fcvc],
+        'NCP': [user_profile.ncp],
+        'Age': [user_profile.age],
+        'Height': [user_profile.height],
+        'Weight': [user_profile.weight]
+    }
+    
+    df = pd.DataFrame(data)
+    print("Initial DataFrame:")
+    print(df)
+
+    # Step 2: Handle Missing Values
+    categorical_features = ['Gender', 'family_history_with_overweight', 'FAVC', 'CAEC', 'SMOKE', 'SCC', 'CALC', 'MTRANS']
+    numeric_features = ['FAF', 'TUE', 'CH2O', 'FCVC', 'NCP', 'Age', 'Height', 'Weight']
+
+    # Define imputers
+    categorical_imputer = SimpleImputer(strategy='constant', fill_value='Unknown')
+    numeric_imputer = SimpleImputer(strategy='mean')
+
+    # Apply imputations
+    df[categorical_features] = categorical_imputer.fit_transform(df[categorical_features])
+    df[numeric_features] = numeric_imputer.fit_transform(df[numeric_features])
+
+    print("DataFrame after handling missing values:")
+    print(df)
+
+    # Load and apply preprocessor
+    model = load_model_obesity()
+    preprocessor = model.named_steps['preprocessor']
+    df_transformed = preprocessor.transform(df)
+    
+    print("Transformed Data Shape:", df_transformed.shape)
+    print("Transformed Data:")
+    print(df_transformed)
+
+    return df_transformed
+
+def predict_obesity(user_id):
+    model = load_model_obesity()
+    label_encoder = load_label_encoder()
+    user_profile = get_object_or_404(UserProfile, user_id=user_id)
+    features = preprocess_user_data_ob(user_profile)
+    
+    # Ensure features is a 2D array
+    if features.ndim == 1:
+        features = features.reshape(1, -1)
+    
+    prediction_num = model.named_steps['classifier'].predict(features)[0]
+    prediction_label = label_encoder.inverse_transform([prediction_num])[0]
+    print("Obesity Prediction:", prediction_label)
+    
+    # Save prediction to database
+    ObesityPrediction.objects.create(user=user_profile.user, prediction=prediction_label)
+    print(prediction_num)
+    return prediction_num

@@ -10,7 +10,7 @@
         {% csrf_token %}
 
         <div id="profileCarousel" class="carousel slide mt-5" data-ride="carousel" data-interval="false">
-                    <div class="mainCarousel">
+            <div class="mainCarousel">
                 <a class="carousel-control-prev" href="#profileCarousel" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
@@ -26,6 +26,9 @@
                 <li data-target="#profileCarousel" data-slide-to="1"></li>
                 <li data-target="#profileCarousel" data-slide-to="2"></li>
                 <li data-target="#profileCarousel" data-slide-to="3"></li>
+                <li data-target="#profileCarousel" data-slide-to="4"></li>
+                <li data-target="#profileCarousel" data-slide-to="5"></li>
+                <li data-target="#profileCarousel" data-slide-to="6"></li>
             </div>
             <div class="carousel-inner">
                 <!-- Slide 1 -->
@@ -52,11 +55,11 @@
                             <h5 class="card-title">Informations Physiques 2/4</h5>
                             <div class="form-group">
                                 <p>Entrez votre taille en cm</p>
-                                
+
                                 {{ form.height }}
                             </div>
                             <div class="form-group">
-                               <p>Entrez votre poids en kg</p>
+                                <p>Entrez votre poids en kg</p>
                                 {{ form.weight }}
                             </div>
                             <div class="form-group">
@@ -95,20 +98,94 @@
                                 <p>Entrez votre niveau de stress de 1 a 10</p>
                                 {{ form.stress_level }}
                             </div>
-                           
+
                         </div>
                     </div>
                 </div>
+                <!-- Slide 5 -->
+                <div class="carousel-item">
+                    <div class="card p-5">
+                        <div class="card-body p-5">
+                            <h5 class="card-title">Probles de santé 1/3</h5>
+                            <div class="form-group">
+                                <p>antecedent d'obésité dans la famille</p>
+                                {{ form.family_history_with_overweight }}
+                            </div>
+                            <div class="form-group">
+                                <p>AAAAAAA</p>
+                                {{ form.favc }}
+                            </div>
+                            <div class="form-group">
+                                <p>AAAAAAA</p>
+                                {{ form.caec }}
+                            </div>
+                            <div class="form-group">
+                                <p>AAAAAAA</p>
+                                {{ form.smoke }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 6 -->
+                <div class="carousel-item">
+                    <div class="card p-5">
+                        <div class="card-body p-5">
+                            <h5 class="card-title">Activités et Stress 4/4</h5>
+                            <div class="form-group">
+                                <p>AAAAAAAA</p>
+                                {{ form.scc }}
+                            </div>
+                            <div class="form-group">
+                                <p>AAAAAA</p>
+                                {{ form.calc }}
+                            </div>
+                            <div class="form-group">
+                                <p>AAAAAAAA</p>
+                                {{ form.mtrans }}
+                            </div>
+                            <div class="form-group">
+                                <p>AAAAAA</p>
+                                {{ form.faf }}
+                            </div>
+                            <div class="form-group">
+                                <p>AAAAAA</p>
+                                {{ form.tue }}
+                            </div>
+                            <div class="form-group">
+                                <p>Consomation d'eau</p>
+                                {{ form.ch2o }}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                    <!-- Slide 6 -->
+                    <div class="carousel-item">
+                        <div class="card p-5">
+                            <div class="card-body p-5">
+                                <h5 class="card-title">Activités et Stress 4/4</h5>
+
+                                <div class="form-group">
+                                    <p>AAAAAA</p>
+                                    {{ form.fcvc }}
+                                </div>
+                                <div class="form-group">
+                                    <p>AAAAAA</p>
+                                    {{ form.ncp }}
+                                </div>
+                            </div>
+                        </div>
+                   
+                </div>
+
+
+                <!-- Carousel controls -->
+
+
             </div>
 
-
-            <!-- Carousel controls -->
-           
-           
         </div>
 
-            </div>
-   
 
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-custom">Sauvergarder</button>

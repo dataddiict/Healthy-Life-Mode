@@ -12,7 +12,7 @@
         <div class="container mt-5">
             <h5 class="card-title">Informations Utilisateur</h5>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <p><strong>Pseudo:</strong> {{ user.username }}</p>
                     <p><strong>Email:</strong> {{ user.email }}</p>
                     <p><strong>FNom:</strong> {{ user.first_name }}</p>
@@ -21,7 +21,7 @@
                         <a href="{% url 'user_update' %}" class="btn btn-custom">Modifier Profile</a>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <p><strong>Age:</strong> {{ profile.age }}</p>
                     <p><strong>Sexe:</strong> {{ profile.sexe }}</p>
                     <p><strong>Taille:</strong> {{ profile.height }} cm</p>
@@ -31,9 +31,24 @@
                     <p><strong>durée de la nuit:</strong> {{ profile.sleep_duration }} (1-10)</p>
                     <p><strong>Niveau d'activité Physiques:</strong> {{ profile.physical_activity }} (1-70)</p>
                     <p><strong>Niveau de stress:</strong> {{ profile.stress_level }} (1-10)</p>
-                    <div class=" mt-4">
-                        <a href="{% url 'update_profile' %}" class="btn btn-custom">Modifier Info</a>
-                    </div>
+                   
+                </div>
+                <div class="col-md-3">
+                    <p><strong>antecedent d'obésité dans la famille:</strong> {{ profile.family_history_with_overweight }}</p>
+                    <p><strong>consomation de produit gras:</strong> {{ profile.favc }}</p>
+                    <p><strong>fréquent grignotage:</strong> {{ profile.caec }}</p>
+                    <p><strong>fumeur:</strong> {{ profile.smoke }}</p>
+                    <p><strong>les calories vous import:</strong> {{ profile.scc }}</p>
+                    <p><strong>consomation d'alcool:</strong> {{ profile.calc }}</p>
+                    <p><strong>Consomation d'eau:</strong> {{ profile.mtrans }} en litre</p>
+                    <p><strong>frequence d'activité physique hebdomadaire:</strong> {{ profile.faf }}</p>
+                    <p><strong>Temps passé sur les écrans par jour:</strong> {{ profile.tue }}</p>
+                    <p><strong>Consomation d'eau:</strong> {{ profile.ch2o }} en litre</p>
+                    <p><strong>Consomation d'eau:</strong> {{ profile.fcvc }} en litre</p>
+                    <p><strong>Consomation d'eau:</strong> {{ profile.ncp }} en litre</p>    
+                </div>
+                <div class=" mt-4">
+                    <a href="{% url 'update_profile' %}" class="btn btn-custom">Modifier Info</a>
                 </div>
                 <div class="container mt-5"></div>
             </div>

@@ -31,7 +31,9 @@ MODEL_PATH = MODEL_DIR / 'sleep_disorder_model.joblib'
 # Chemin vers le modèle
 MODEL_SLEEP_PATH = MODEL_DIR / 'sleep_disorder_model.joblib'
 MODEL_SLEEP_PATH_ENCODE = MODEL_DIR / 'label_encoders.joblib'
-
+MODEL_OBESITY_PATH = MODEL_DIR / 'obesity_model.pkl'
+MODEL_OBESITY_PATH_ENCODE = MODEL_DIR / 'label_encoder_obesity.pkl'
+MODEL_OBESITY_PATH_PREPROCESS = MODEL_DIR / 'preprocessor_obesity.pkl'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 

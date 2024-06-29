@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User as DjangoUser
-from .models import UserProfile, predict_sleep_disorder
+from .models import UserProfile, predict_sleep_disorder, predict_obesity
 from django import forms
 from .models import User_User, getunbr_user, UserUpdateForm
 from django.contrib.auth.models import User
@@ -70,7 +70,14 @@ def update_user(request):
 class UserProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['age', 'sexe', 'height', 'weight', 'steps', 'sleep_quality', 'sleep_duration', 'physical_activity', 'stress_level']
+        fields = ['age', 'sexe',
+                  'height', 'weight',
+                  'steps', 'sleep_quality',
+                  'sleep_duration', 'physical_activity',
+                  'stress_level', 'family_history_with_overweight',
+                  'favc', 'caec', 'smoke', 'scc', 'calc', 'mtrans' ,'faf' ,'tue' ,'ch2o','fcvc','ncp'
+                  
+                  ]
 
 @login_required
 def update_profile(request):
@@ -91,22 +98,50 @@ def update_profile(request):
 def predict_sleep_disorder_view(request):
     user_id = request.user.id
     prediction = predict_sleep_disorder(user_id)
-    
-    result = ''
-    message = ''
+    prediction_obs = predict_obesity(user_id)
+
+    result_sleep = ''
+    message_sleep = ''
+    result_obesity = ''
+    message_obesity = ''
+
     if prediction == 0:
-        result = 'Pas de trouble du sommeil'
-        message = 'Félicitations ! Vous n\'avez pas de troubles du sommeil. Continuez à maintenir une bonne hygiène de sommeil.'
+        result_sleep = 'Pas de trouble du sommeil'
+        message_sleep = 'Félicitations ! Vous n\'avez pas de troubles du sommeil. Continuez à maintenir une bonne hygiène de sommeil.'
     elif prediction == 1:
-        result = 'Apnée du sommeil'
-        message = 'Nous avons détecté des signes d\'apnée du sommeil. Il est recommandé de consulter un professionnel de la santé.'
+        result_sleep = 'Apnée du sommeil'
+        message_sleep = 'Nous avons détecté des signes d\'apnée du sommeil. Il est recommandé de consulter un professionnel de la santé.'
     elif prediction == 2:
-        result = 'Insomnie'
-        message = 'Les résultats indiquent que vous pourriez souffrir d\'insomnie. Essayez de suivre des routines de sommeil régulières et évitez les écrans avant de dormir.'
+        result_sleep = 'Insomnie'
+        message_sleep = 'Les résultats indiquent que vous pourriez souffrir d\'insomnie. Essayez de suivre des routines de sommeil régulières et évitez les écrans avant de dormir.'
+
+    if prediction_obs == 0:
+        result_obesity = 'Insufficient Weight'
+        message_obesity = "Vous êtes en insuffisance pondérale. Essayez d'ajuster légèrement votre mode de vie pour atteindre un poids optimal."
+    elif prediction_obs == 1:
+        result_obesity = 'Normal Weight'
+        message_obesity = "Vous avez un poids normal ! Félicitations pour maintenir un mode de vie sain."
+    elif prediction_obs == 2:
+        result_obesity = 'Overweight Level I'
+        message_obesity = "Vous êtes légèrement en surpoids. Essayez d'ajuster légèrement votre mode de vie pour atteindre un poids optimal."
+    elif prediction_obs == 3:
+        result_obesity = 'Overweight Level II'
+        message_obesity = "Vous êtes modérément en surpoids. Essayez d'ajuster légèrement votre mode de vie pour atteindre un poids optimal."
+    elif prediction_obs == 4:
+        result_obesity = 'Obesity Type I'
+        message_obesity = "Vous êtes sévèrement en surpoids. Il est recommandé de consulter un professionnel de la santé pour vous aider à ajuster votre mode de vie."
+    elif prediction_obs == 5:
+        result_obesity = 'Obesity Type II'
+        message_obesity = "Vous êtes très en surpoids. Il est recommandé de consulter un professionnel de la santé pour vous aider à ajuster votre mode de vie."
+    elif prediction_obs == 6:
+        result_obesity = 'Obesity Type III'
+        message_obesity = "Vous êtes obèse morbide. Il est crucial de consulter un spécialiste pour un soutien approprié."
 
     context = {
-        'result': result,
-        'message': message
+        'result_sleep': result_sleep,
+        'message_sleep': message_sleep,
+        'result_obesity': result_obesity,
+        'message_obesity': message_obesity
     }
     return render(request, 'prediction_result.html', context)
 
