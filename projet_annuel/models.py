@@ -36,15 +36,6 @@ class FollowDataUser(models.Model):
     physical_activity = models.IntegerField(null=True, blank=True)
     stress_level = models.IntegerField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    family_history_with_overweight = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
-    favc = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
-    caec = models.CharField(max_length=10, choices=[('no', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], null=True, blank=True)
-    smoke = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
-    scc = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
-    calc = models.CharField(max_length=10, choices=[('no', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], null=True, blank=True)
-    mtrans = models.CharField(max_length=21, choices=[('Walking', 'Walking'), ('Bike', 'Bike'), ('Public_Transportation', 'Public_Transportation'), ('Automobile', 'Automobile')], null=True, blank=True)
-    faf = models.FloatField(null=True, blank=True)
-    tue = models.FloatField(null=True, blank=True)
     ch2o = models.FloatField(null=True, blank=True)
     fcvc = models.FloatField(null=True, blank=True)
     ncp = models.FloatField(null=True, blank=True)
@@ -80,18 +71,10 @@ class UserProfile(models.Model):
     sleep_duration = models.FloatField(null=True, blank=True)
     stress_level = models.IntegerField(null=True, blank=True)
     physical_activity = models.IntegerField(null=True, blank=True)
-    family_history_with_overweight = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
-    favc = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
-    caec = models.CharField(max_length=10, choices=[('no', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], null=True, blank=True)
-    smoke = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
-    scc = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
-    calc = models.CharField(max_length=10, choices=[('no', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], null=True, blank=True)
-    mtrans = models.CharField(max_length=21, choices=[('Walking', 'Walking'), ('Bike', 'Bike'), ('Public_Transportation', 'Public_Transportation'), ('Automobile', 'Automobile')], null=True, blank=True)
-    faf = models.FloatField(null=True, blank=True)
-    tue = models.FloatField(null=True, blank=True)
     ch2o = models.FloatField(null=True, blank=True)
     fcvc = models.FloatField(null=True, blank=True)
-    ncp = models.FloatField(null=True, blank=True)    
+    ncp = models.FloatField(null=True, blank=True)
+
     def __str__(self):
         return self.user.username
 
@@ -102,107 +85,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 from django.db.models.signals import post_save
 post_save.connect(create_user_profile, sender=DjangoUser)
 
-def load_model(model_name=model_sleep_path):
-    return joblib.load(model_name)
-
-def load_label_encoders(encoder_name=model_sleep_path_encode):
-    return joblib.load(encoder_name)
-
-
-def load_label_encoders():
-    # Placeholder function to simulate loading pre-fitted label encoders
-    # Replace with your actual loading mechanism
-    encoders = {
-        'Gender': LabelEncoder().fit(['Male', 'Female']),
-        'BMI Category': LabelEncoder().fit(['Underweight', 'Normal', 'Overweight', 'Obese']),
-        'Sleep Duration Category': LabelEncoder().fit(['Très court', 'Court', 'Normal', 'Long']),
-        'Age Category': LabelEncoder().fit(['Enfant', 'Jeune adulte', 'Adulte', 'Senior', 'Super Senior'])
-    }
-    return encoders
-
-def preprocess_user_data(user_profile):
-    # Calculer le BMI
-    bmi = user_profile.weight / (user_profile.height / 100) ** 2
-    if bmi < 18.5:
-        bmi_category = 'Underweight'
-    elif 18.5 <= bmi < 25:
-        bmi_category = 'Normal'
-    elif 25 <= bmi < 30:
-        bmi_category = 'Overweight'
-    else:
-        bmi_category = 'Obese'
-
-    # Créer un DataFrame avec les données utilisateur
-    data = {
-        'Gender': [user_profile.sexe],
-        'Quality of Sleep': [user_profile.sleep_quality],
-        'Physical Activity Level': [user_profile.physical_activity],
-        'Stress Level': [user_profile.stress_level],
-        'BMI Category': [bmi_category],
-        'Daily Steps': [user_profile.steps],
-        'Sleep Duration': [user_profile.sleep_duration],
-        'Heart Rate': [70],  # Placeholder - ajouter le champ si nécessaire
-        'Age': [user_profile.age],
-    }
-    df = pd.DataFrame(data)
-
-    # Appliquer les transformations comme dans le notebook
-    heart_rate_bins = [0, 60, 80, 100, float('inf')]
-    heart_rate_labels = ['Faible', 'Modéré', 'Élevé', 'Très élevé']
-    df['Heart Rate Category'] = pd.cut(df['Heart Rate'], bins=heart_rate_bins, labels=heart_rate_labels)
-
-    sleep_duration_bins = [0, 5, 7, 9, float('inf')]
-    sleep_duration_labels = ['Très court', 'Court', 'Normal', 'Long']
-    df['Sleep Duration Category'] = pd.cut(df['Sleep Duration'], bins=sleep_duration_bins, labels=sleep_duration_labels)
-
-    age_bins = [0, 18, 30, 50, 70, float('inf')]
-    age_labels = ['Enfant', 'Jeune adulte', 'Adulte', 'Senior', 'Super Senior']
-    df['Age Category'] = pd.cut(df['Age'], bins=age_bins, labels=age_labels)
-
-    df.drop(columns=['Sleep Duration', 'Heart Rate', 'Age', 'Heart Rate Category'], inplace=True)
-
-    # Charger les encodeurs
-    label_encoders = load_label_encoders()
-
-    # Assurez-vous que les valeurs sont cohérentes avec celles utilisées pendant l'entraînement
-    for col in ['Gender', 'BMI Category', 'Sleep Duration Category', 'Age Category']:
-        df[col] = df[col].apply(lambda x: label_encoders[col].transform([x])[0] if x in label_encoders[col].classes_ else -1)
-
-    # Réorganiser les colonnes pour correspondre à l'ordre de l'entraînement
-    final_columns = ['Gender', 'Quality of Sleep', 'Physical Activity Level', 'Stress Level',
-                     'BMI Category', 'Daily Steps', 'Sleep Duration Category', 'Age Category']
-    df = df[final_columns]
-
-    return df.values[0]
-
-def predict_sleep_disorder(user_id):
-    model = load_model()
-    feature_names = model.feature_names_in_
-    print(feature_names)
-    # Récupérer l'utilisateur et son profil
-    user_profile = UserProfile.objects.get(user_id=user_id)
-    
-    # Prétraiter les données utilisateur
-    features = preprocess_user_data(user_profile)
-    
-    # Faire la prédiction
-    prediction = model.predict([features])[0]
-    
-    # Enregistrer les données dans FollowDataUser
-    FollowDataUser.objects.create(
-        user=user_profile.user,
-        age=user_profile.age,
-        sexe=user_profile.sexe,
-        height=user_profile.height,
-        weight=user_profile.weight,
-        steps=user_profile.steps,
-        sleep_quality=user_profile.sleep_quality,
-        sleep_duration=user_profile.sleep_duration,
-        physical_activity=user_profile.physical_activity,
-        stress_level=user_profile.stress_level
-    )
-    
-    return prediction
 
 class User_User(models.Model):
     pseudo = models.CharField(max_length=100)
@@ -219,15 +101,6 @@ class User_User(models.Model):
     sleep_duration = models.IntegerField(null=True, blank=True)
     stress_level = models.IntegerField(null=True, blank=True)
     physical_activity = models.IntegerField(null=True, blank=True)
-    family_history_with_overweight = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
-    favc = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
-    caec = models.CharField(max_length=10, choices=[('no', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], null=True, blank=True)
-    smoke = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
-    scc = models.CharField(max_length=3, choices=[('yes', 'Yes'), ('no', 'No')], null=True, blank=True)
-    calc = models.CharField(max_length=10, choices=[('no', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], null=True, blank=True)
-    mtrans = models.CharField(max_length=21, choices=[('Walking', 'Walking'), ('Bike', 'Bike'), ('Public_Transportation', 'Public_Transportation'), ('Automobile', 'Automobile')], null=True, blank=True)
-    faf = models.FloatField(null=True, blank=True)
-    tue = models.FloatField(null=True, blank=True)
     ch2o = models.FloatField(null=True, blank=True)
     fcvc = models.FloatField(null=True, blank=True)
     ncp = models.FloatField(null=True, blank=True)
@@ -341,6 +214,9 @@ def getunbr_user():
     return unbr_user[0]
 
 
+#_______________________________________________________________________________________________________________________
+
+
 class ObesityPrediction(models.Model):
     user = models.ForeignKey(DjangoUser, on_delete=models.CASCADE)
     prediction = models.CharField(max_length=20)
@@ -359,15 +235,6 @@ def preprocess_user_data_ob(user_profile):
     
     data = {
         'Gender': [gender],
-        'family_history_with_overweight': [user_profile.family_history_with_overweight],
-        'FAVC': [user_profile.favc],
-        'CAEC': [user_profile.caec],
-        'SMOKE': [user_profile.smoke],
-        'SCC': [user_profile.scc],
-        'CALC': [user_profile.calc],
-        'MTRANS': [user_profile.mtrans],
-        'FAF': [user_profile.faf],
-        'TUE': [user_profile.tue],
         'CH2O': [user_profile.ch2o],
         'FCVC': [user_profile.fcvc],
         'NCP': [user_profile.ncp],
@@ -381,8 +248,8 @@ def preprocess_user_data_ob(user_profile):
     print(df)
 
     # Step 2: Handle Missing Values
-    categorical_features = ['Gender', 'family_history_with_overweight', 'FAVC', 'CAEC', 'SMOKE', 'SCC', 'CALC', 'MTRANS']
-    numeric_features = ['FAF', 'TUE', 'CH2O', 'FCVC', 'NCP', 'Age', 'Height', 'Weight']
+    categorical_features = ['Gender']
+    numeric_features = ['CH2O', 'FCVC', 'NCP', 'Age', 'Height', 'Weight']
 
     # Define imputers
     categorical_imputer = SimpleImputer(strategy='constant', fill_value='Unknown')
@@ -420,7 +287,72 @@ def predict_obesity(user_id):
     prediction_label = label_encoder.inverse_transform([prediction_num])[0]
     print("Obesity Prediction:", prediction_label)
     
+    # print label and their numbers
+    print("Label and their numbers:")
+    for label, num in zip(label_encoder.classes_, range(len(label_encoder.classes_))):
+        print(f"{label}: {num}")
+
     # Save prediction to database
     ObesityPrediction.objects.create(user=user_profile.user, prediction=prediction_label)
     print(prediction_num)
+    
     return prediction_num
+
+
+#_______________________________________________________________________________________________________________________
+
+
+def load_model(model_name=model_sleep_path):
+    return joblib.load(model_name)
+
+
+def preprocess_user_data(user_profile):
+    # Calculate BMI
+    bmi = user_profile.weight / (user_profile.height / 100) ** 2
+    if bmi < 18.5:
+        bmi_category = 'Underweight'
+    elif 18.5 <= bmi < 25:
+        bmi_category = 'Normal'
+    elif 25 <= bmi < 30:
+        bmi_category = 'Overweight'
+    else:
+        bmi_category = 'Obese'
+
+    # Map categorical values to numerical values
+    gender_map = {'M': 0, 'F': 1}
+    bmi_category_map = {'Underweight': 0, 'Normal': 1, 'Overweight': 2, 'Obese': 3}
+    age_bins = [0, 18, 30, 50, 70, float('inf')]
+    age_labels = [0, 1, 2, 3, 4]  # Numeric labels for age categories
+    
+    gender = gender_map.get(user_profile.sexe, -1)
+    bmi_category = bmi_category_map.get(bmi_category, -1)
+    age_category = pd.cut([user_profile.age], bins=age_bins, labels=age_labels).astype(int)[0]
+
+    # Create a DataFrame with user data
+    data = {
+        'Gender': [gender],
+        'Quality of Sleep': [user_profile.sleep_quality],
+        'Physical Activity Level': [user_profile.physical_activity],
+        'Stress Level': [user_profile.stress_level],
+        'BMI Category': [bmi_category],
+        'Daily Steps': [user_profile.steps],
+        'Sleep Duration': [user_profile.sleep_duration],
+        'Age Category': [age_category],
+    }
+    df = pd.DataFrame(data)
+    print(df)
+
+    # Rearrange columns to match the order used in training
+    final_columns = ['Gender', 'Quality of Sleep', 'Physical Activity Level', 'Stress Level',
+                     'BMI Category', 'Daily Steps', 'Sleep Duration', 'Age Category']
+    df = df[final_columns]
+    return df.values[0]
+
+def predict_sleep_disorder(user_id):
+    model = load_model()
+    user_profile = UserProfile.objects.get(user_id=user_id)
+    features = preprocess_user_data(user_profile)
+    prediction = model.predict([features])[0]
+    return prediction
+
+

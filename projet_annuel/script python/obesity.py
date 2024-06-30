@@ -36,8 +36,8 @@ for train_index, val_index in sss.split(X, y_encoded):
     y_train, y_val = y_encoded[train_index], y_encoded[val_index]
 
 # Define feature sets
-categorical_features = ['Gender', 'family_history_with_overweight', 'FAVC', 'CAEC', 'SMOKE', 'SCC', 'CALC', 'MTRANS']
-numeric_features = ['FAF', 'TUE', 'CH2O', 'FCVC', 'NCP', 'Age', 'Height', 'Weight']
+categorical_features = ['Gender']
+numeric_features = ['CH2O', 'FCVC', 'NCP', 'Age', 'Height', 'Weight']
 
 # Create preprocessor
 preprocessor = ColumnTransformer(

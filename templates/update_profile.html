@@ -27,16 +27,13 @@
                 <li data-target="#profileCarousel" data-slide-to="2"></li>
                 <li data-target="#profileCarousel" data-slide-to="3"></li>
                 <li data-target="#profileCarousel" data-slide-to="4"></li>
-                <li data-target="#profileCarousel" data-slide-to="5"></li>
-                <li data-target="#profileCarousel" data-slide-to="6"></li>
             </div>
             <div class="carousel-inner">
                 <!-- Slide 1 -->
                 <div class="carousel-item active">
-                    <div class="card p-5">
+                    <div class="card text-center p-5 custom-width-card">
                         <div class="card-body p-5">
-                            <h5 class="card-title">Informations Personnelles 1/4</h5>
-
+                            <h5 class="card-title">Informations Personnelles 1/5</h5>
                             <div class="form-group">
                                 {{ form.age.label_tag }}
                                 {{ form.age }}
@@ -45,17 +42,22 @@
                                 {{ form.sexe.label_tag }}
                                 {{ form.sexe }}
                             </div>
+                            <div class="card-body p-5">
+                               
+                                </div>
+                                <div class="card-body p-5">
+                               
+                                </div>
                         </div>
                     </div>
                 </div>
                 <!-- Slide 2 -->
                 <div class="carousel-item">
-                    <div class="card p-5">
+                    <div class="card text-center p-5 custom-width-card">
                         <div class="card-body p-5">
-                            <h5 class="card-title">Informations Physiques 2/4</h5>
+                            <h5 class="card-title">Informations Physiques 2/5</h5>
                             <div class="form-group">
                                 <p>Entrez votre taille en cm</p>
-
                                 {{ form.height }}
                             </div>
                             <div class="form-group">
@@ -71,9 +73,9 @@
                 </div>
                 <!-- Slide 3 -->
                 <div class="carousel-item">
-                    <div class="card p-5 ">
+                    <div class="card text-center p-5 custom-width-card">
                         <div class="card-body p-5">
-                            <h5 class="card-title">Qualité du Sommeil 3/4</h5>
+                            <h5 class="card-title">Qualité du Sommeil 3/5</h5>
                             <div class="form-group">
                                 <p>Entrez la qualité de votre sommeil de 1 a 10, comment vous vous sentez au réveil</p>
                                 {{ form.sleep_quality }}
@@ -87,9 +89,9 @@
                 </div>
                 <!-- Slide 4 -->
                 <div class="carousel-item">
-                    <div class="card p-5">
+                    <div class="card text-center p-5 custom-width-card">
                         <div class="card-body p-5">
-                            <h5 class="card-title">Activités et Stress 4/4</h5>
+                            <h5 class="card-title">Activités et Stress 4/5</h5>
                             <div class="form-group">
                                 <p>Entrez votre niveau d'activité physique de 1 a 65</p>
                                 {{ form.physical_activity }}
@@ -98,95 +100,41 @@
                                 <p>Entrez votre niveau de stress de 1 a 10</p>
                                 {{ form.stress_level }}
                             </div>
-
+                            <div class="card-body p-5">
+                               
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!-- Slide 5 -->
                 <div class="carousel-item">
-                    <div class="card p-5">
+                    <div class="card text-center p-5 custom-width-card">
                         <div class="card-body p-5">
-                            <h5 class="card-title">Probles de santé 1/3</h5>
+                            <h5 class="card-title">Trouble obésité 5/5</h5>
                             <div class="form-group">
                                 <p>antecedent d'obésité dans la famille</p>
                                 {{ form.family_history_with_overweight }}
                             </div>
                             <div class="form-group">
-                                <p>consomation de produit gras</p>
-                                {{ form.favc }}
-                            </div>
-                            <div class="form-group">
-                                <p>fréquent grignotage</p>
-                                {{ form.caec }}
-                            </div>
-                            <div class="form-group">
-                                <p>fumeur</p>
-                                {{ form.smoke }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Slide 6 -->
-                <div class="carousel-item">
-                    <div class="card p-5">
-                        <div class="card-body p-5">
-                            <h5 class="card-title">Activités et Stress 4/4</h5>
-                            <div class="form-group">
-                                <p>mesurer les calories vous importe</p>
-                                {{ form.scc }}
-                            </div>
-                            <div class="form-group">
-                                <p>consomation d'alcool</p>
-                                {{ form.calc }}
-                            </div>
-                            <div class="form-group">
-                                <p>habitude de transport</p>
-                                {{ form.mtrans }}
-                            </div>
-                            <div class="form-group">
-                                <p>frequence d'activité physique hebdomadaire</p>
-                                {{ form.faf }}
-                            </div>
-                            <div class="form-group">
-                                <p>Temps passé sur les écrans par jour</p>
-                                {{ form.tue }}
-                            </div>
-                            <div class="form-group">
                                 <p>Consomation d'eau</p>
                                 {{ form.ch2o }}
                             </div>
-
+                            <div class="form-group">
+                                <p>freqence quotidienne de consomation de legume</p>
+                                {{ form.fcvc }}
+                            </div>
+                            <div class="form-group">
+                                <p>Nombre de repas par jour</p>
+                                {{ form.ncp }}
+                            </div>
                         </div>
                     </div>
                 </div>
-                    <!-- Slide 6 -->
-                    <div class="carousel-item">
-                        <div class="card p-5">
-                            <div class="card-body p-5">
-                                <h5 class="card-title">Activités et Stress 4/4</h5>
-
-                                <div class="form-group">
-                                    <p>freqence quotidienne de consomation de legume</p>
-                                    {{ form.fcvc }}
-                                </div>
-                                <div class="form-group">
-                                    <p>Nombre de repas par jour</p>
-                                    {{ form.ncp }}
-                                </div>
-                            </div>
-                        </div>
-                   
-                </div>
-
-
-                <!-- Carousel controls -->
-
-
             </div>
-
         </div>
-
-
+        
+        
+        </div>
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-custom">Sauvergarder</button>
             <a href="{% url 'user_profile' %}" class="btn btn-custom">Abandonner</a>

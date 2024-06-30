@@ -74,8 +74,8 @@ class UserProfileUpdateForm(forms.ModelForm):
                   'height', 'weight',
                   'steps', 'sleep_quality',
                   'sleep_duration', 'physical_activity',
-                  'stress_level', 'family_history_with_overweight',
-                  'favc', 'caec', 'smoke', 'scc', 'calc', 'mtrans' ,'faf' ,'tue' ,'ch2o','fcvc','ncp'
+                  'stress_level',
+                  'ch2o','fcvc','ncp'
                   
                   ]
 
@@ -116,25 +116,25 @@ def predict_sleep_disorder_view(request):
         message_sleep = 'Les résultats indiquent que vous pourriez souffrir d\'insomnie. Essayez de suivre des routines de sommeil régulières et évitez les écrans avant de dormir.'
 
     if prediction_obs == 0:
-        result_obesity = 'Insufficient Weight'
+        result_obesity = "Sous-poids"
         message_obesity = "Vous êtes en insuffisance pondérale. Essayez d'ajuster légèrement votre mode de vie pour atteindre un poids optimal."
     elif prediction_obs == 1:
-        result_obesity = 'Normal Weight'
+        result_obesity = 'Poids normal'
         message_obesity = "Vous avez un poids normal ! Félicitations pour maintenir un mode de vie sain."
-    elif prediction_obs == 2:
-        result_obesity = 'Overweight Level I'
-        message_obesity = "Vous êtes légèrement en surpoids. Essayez d'ajuster légèrement votre mode de vie pour atteindre un poids optimal."
-    elif prediction_obs == 3:
-        result_obesity = 'Overweight Level II'
-        message_obesity = "Vous êtes modérément en surpoids. Essayez d'ajuster légèrement votre mode de vie pour atteindre un poids optimal."
-    elif prediction_obs == 4:
-        result_obesity = 'Obesity Type I'
-        message_obesity = "Vous êtes sévèrement en surpoids. Il est recommandé de consulter un professionnel de la santé pour vous aider à ajuster votre mode de vie."
     elif prediction_obs == 5:
-        result_obesity = 'Obesity Type II'
-        message_obesity = "Vous êtes très en surpoids. Il est recommandé de consulter un professionnel de la santé pour vous aider à ajuster votre mode de vie."
+        result_obesity = "Surpoids léger"
+        message_obesity = "Vous êtes légèrement en surpoids. Essayez d'ajuster légèrement votre mode de vie pour atteindre un poids optimal."
     elif prediction_obs == 6:
-        result_obesity = 'Obesity Type III'
+        result_obesity = "Surpoids modéré"
+        message_obesity = "Vous êtes modérément en surpoids. Essayez d'ajuster légèrement votre mode de vie pour atteindre un poids optimal."
+    elif prediction_obs == 2:
+        result_obesity = "Obésité de type I"
+        message_obesity = "Vous êtes sévèrement en surpoids. Il est recommandé de consulter un professionnel de la santé pour vous aider à ajuster votre mode de vie."
+    elif prediction_obs == 3:
+        result_obesity = "Obésité de type II"
+        message_obesity = "Vous êtes très en surpoids. Il est recommandé de consulter un professionnel de la santé pour vous aider à ajuster votre mode de vie."
+    elif prediction_obs == 4:
+        result_obesity = "Obésité de type III"
         message_obesity = "Vous êtes obèse morbide. Il est crucial de consulter un spécialiste pour un soutien approprié."
 
     context = {
