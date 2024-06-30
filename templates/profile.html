@@ -29,13 +29,13 @@
                     <p><strong>Pas:</strong> {{ profile.steps }} par jour</p>
                     <p><strong>Qualité du repos:</strong> {{ profile.sleep_quality }} (1-10)</p>
                     <p><strong>durée de la nuit:</strong> {{ profile.sleep_duration }} (1-10)</p>
-                    <p><strong>Niveau d'activité Physiques:</strong> {{ profile.physical_activity }} (1-70)</p>
+                    <p><strong>Niveau d'activité Physiques:</strong> {{ profile.physical_activity }} (1-100)</p>
                     <p><strong>Niveau de stress:</strong> {{ profile.stress_level }} (1-10)</p>                   
                 </div>
                 <div class="col-md-3">
                     <p><strong>consomation de légume par niveau 1-3 :</strong> {{ profile.fcvc }}</p>
                     <p><strong>nombre de repas quotitiden:</strong> {{ profile.ncp }}</p>
-                    <p><strong>Consomation d'eau:</strong> {{ profile.ch2o }} en litre</p>  
+                    <p><strong>Consomation d'eau:</strong> {{ profile.ch2o }} en litre 3 max</p>  
                 </div>
                 <div class=" mt-4">
                     <a href="{% url 'update_profile' %}" class="btn btn-custom">Modifier Info</a>
