@@ -305,7 +305,6 @@ def predict_obesity(user_id):
 def load_model(model_name=model_sleep_path):
     return joblib.load(model_name)
 
-
 def preprocess_user_data(user_profile):
     # Calculate BMI
     bmi = user_profile.weight / (user_profile.height / 100) ** 2
@@ -354,5 +353,4 @@ def predict_sleep_disorder(user_id):
     features = preprocess_user_data(user_profile)
     prediction = model.predict([features])[0]
     return prediction
-
 

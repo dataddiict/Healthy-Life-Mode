@@ -57,10 +57,13 @@ def train_model(data):
     print("0: Pas de trouble du sommeil\n1: Apnée du sommeil\n2: Insomnie")
     print(classification_report(y_test, y_pred))
     
+    # Print feature importances to check for any issues
+    print("Feature importances:", clf.feature_importances_)
+    print("Feature names:", X.columns.tolist())
+    
     # Save the model
     save_model(clf, 'sleep_disorder_model')
 
-    print("feature", X.columns)
 # Main function to process data and train model
 def main():
     file_path = 'Sleep_health_and_lifestyle_dataset.csv'
