@@ -336,14 +336,14 @@ def preprocess_user_data(user_profile):
         'BMI Category': [bmi_category],
         'Daily Steps': [user_profile.steps],
         'Sleep Duration': [user_profile.sleep_duration],
-        'Age Category': [age_category],
+        'Age': [user_profile.age]
     }
     df = pd.DataFrame(data)
     print(df)
 
     # Rearrange columns to match the order used in training
     final_columns = ['Gender', 'Quality of Sleep', 'Physical Activity Level', 'Stress Level',
-                     'BMI Category', 'Daily Steps', 'Sleep Duration', 'Age Category']
+                     'BMI Category', 'Daily Steps', 'Sleep Duration', 'Age']
     df = df[final_columns]
     return df.values[0]
 

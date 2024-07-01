@@ -25,7 +25,7 @@ def process_data(file_path):
     # Map categorical values to numerical values
     gender_map = {'Male': 0, 'Female': 1}
     bmi_category_map = {'Underweight': 0, 'Normal': 1, 'Overweight': 2, 'Obese': 3}
-    sleep_disorder_map = {'None': 0, 'Sleep Apnea': 1, 'Insomnia': 2}
+    sleep_disorder_map = {"No": 0, 'Sleep Apnea': 1, 'Insomnia': 2}
 
     data['Gender'] = data['Gender'].map(gender_map)
     data['BMI Category'] = data['BMI Category'].map(bmi_category_map)
@@ -66,7 +66,7 @@ def train_model(data):
 
 # Main function to process data and train model
 def main():
-    file_path = 'Sleep_health_and_lifestyle_dataset.csv'
+    file_path = '../Data/Sleep_health_and_lifestyle_dataset.csv'
     data = process_data(file_path)
     train_model(data)
 
