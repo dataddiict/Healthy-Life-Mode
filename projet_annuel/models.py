@@ -350,6 +350,19 @@ def preprocess_user_data(user_profile):
 def predict_sleep_disorder(user_id):
     model = load_model()
     user_profile = UserProfile.objects.get(user_id=user_id)
+    # Save user data to FollowDataUser for history
+    FollowDataUser.objects.create(
+        user=user_profile.user,
+        age=user_profile.age,
+        sexe=user_profile.sexe,
+        height=user_profile.height,
+        weight=user_profile.weight,
+        steps=user_profile.steps,
+        sleep_quality=user_profile.sleep_quality,
+        sleep_duration=user_profile.sleep_duration,
+        physical_activity=user_profile.physical_activity,
+        stress_level=user_profile.stress_level
+    )
     features = preprocess_user_data(user_profile)
     prediction = model.predict([features])[0]
     return prediction
