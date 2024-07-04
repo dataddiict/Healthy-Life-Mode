@@ -34,6 +34,9 @@ MODEL_SLEEP_PATH_ENCODE = MODEL_DIR / 'label_encoders.joblib'
 MODEL_OBESITY_PATH = MODEL_DIR / 'obesity_model.pkl'
 MODEL_OBESITY_PATH_ENCODE = MODEL_DIR / 'label_encoder_obesity.pkl'
 MODEL_OBESITY_PATH_PREPROCESS = MODEL_DIR / 'preprocessor_obesity.pkl'
+MODEL_STRESS_PATH = MODEL_DIR / 'stress_model.pkl'
+MODEL_STRESS_PATH_PARAMS = MODEL_DIR / 'scaler_params.pkl'
+MODEL_STRESS_PATH_FEATURES = MODEL_DIR / 'feature_names.pkl'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 

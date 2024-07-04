@@ -37,9 +37,17 @@
                     <p><strong>nombre de repas quotitiden:</strong> {{ profile.ncp }}</p>
                     <p><strong>Consomation d'eau:</strong> {{ profile.ch2o }} en litre 3 max</p>  
                 </div>
+                <div class="col-md-3">
+                    <p><strong>Jour passé à l'intérieur :</strong> {{ profile.Days_Indoors }}</p>
+                    <p><strong>Changement d'habitude :</strong> {{ profile.Changes_Habits }}</p>
+                    <p><strong>Interésser au travail :</strong> {{ profile.Work_Interest }}</p> 
+                    <p><strong>Faiblesse sociale :</strong> {{ profile.Social_Weakness }}</p>
+                    <p><strong>Historique de probleme mentaux:</strong> {{ profile.Mental_Health_History }}</p>  
+                
                 <div class=" mt-4">
                     <a href="{% url 'update_profile' %}" class="btn btn-custom">Modifier Info</a>
                 </div>
+            </div>
                 <div class="container mt-5"></div>
             </div>
         </div>

@@ -1,22 +1,16 @@
-import numpy as np
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
-from sklearn.model_selection import StratifiedShuffleSplit, GridSearchCV, cross_val_score
-from imblearn.over_sampling import SMOTE
-from imblearn.pipeline import Pipeline as ImbPipeline
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import StratifiedShuffleSplit
+import joblib
 
-# Charger le dataset
+# Chargement et préparation des données
 df = pd.read_csv("Mental Health Dataset.csv")
-
-# Nettoyage et filtrage des données
 df.dropna(inplace=True)
 df = df[df['Country'] == 'United States']
+
+# Supprimer la colonne Timestamp et autres non pertinentes
+df = df.drop(columns=["Timestamp", "Country", "Occupation", "self_employed", "family_history", "treatment", "Mood_Swings", "Coping_Struggles", "mental_health_interview", "care_options"])
 
 # Mapping des labels pour la colonne cible
 mapping = {'Yes': 1, 'No': 0, 'Maybe': 2}
@@ -26,121 +20,64 @@ df['Growing_Stress'] = df['Growing_Stress'].map(mapping)
 x = df.drop(columns=["Growing_Stress"])
 y = df["Growing_Stress"]
 
+# Définir les caractéristiques catégorielles et numériques
+categorical_features = ['Days_Indoors', 'Changes_Habits', 'Work_Interest', 'Social_Weakness', 'Mental_Health_History', 'Gender']
+numeric_features = ['Age'] if 'Age' in x.columns else []
+
+# Fonction pour encoder manuellement les caractéristiques catégorielles
+def transform_data(data):
+    data['Days_Indoors'] = data['Days_Indoors'].map({'1-14 days': 0, '15-30 days': 1, '31-60 days': 2, 'More than 60 days': 3})
+    data['Changes_Habits'] = data['Changes_Habits'].map({'Yes': 0, 'No': 1, 'Maybe': 2})
+    data['Work_Interest'] = data['Work_Interest'].map({'Yes': 0, 'No': 1})
+    data['Social_Weakness'] = data['Social_Weakness'].map({'Yes': 0, 'No': 1, 'Maybe': 2})
+    data['Mental_Health_History'] = data['Mental_Health_History'].map({'Yes': 0, 'No': 1, 'Maybe': 2})
+    data['Gender'] = data['Gender'].map({'Male': 0, 'Female': 1})
+    return data
+
+# Appliquer la transformation aux données
+x = transform_data(x)
+
+# Vérifier les valeurs manquantes
+print("Valeurs manquantes avant traitement :")
+print(x.isna().sum())
+
+# Remplacer les valeurs manquantes par la médiane (pour les numériques) ou le mode (pour les catégorielles)
+x[numeric_features] = x[numeric_features].fillna(x[numeric_features].median())
+x[categorical_features] = x[categorical_features].fillna(x[categorical_features].mode().iloc[0])
+
+# Vérifier les valeurs manquantes après traitement
+print("Valeurs manquantes après traitement :")
+print(x.isna().sum())
+
 # Séparer les données en ensembles d'entraînement et de validation
-sss = StratifiedShuffleSplit(n_splits=5, test_size=0.1, random_state=42)
+sss = StratifiedShuffleSplit(n_splits=1, test_size=0.1, random_state=42)
 for train_index, val_index in sss.split(x, y):
     x_train, x_val = x.iloc[train_index], x.iloc[val_index]
     y_train, y_val = y.iloc[train_index], y.iloc[val_index]
 
-# Définir les caractéristiques catégorielles et numériques
-categorical_features = ["Gender", "self_employed", "family_history", "treatment", 
-                        "Days_Indoors", "Changes_Habits", "Mental_Health_History", 
-                        "Mood_Swings", "Coping_Struggles", "Work_Interest", 
-                        "Social_Weakness", "mental_health_interview", "care_options"]
-numeric_features = ["Age"]
+# Fonction pour normaliser manuellement les caractéristiques numériques
+def manual_normalize(train, val, numeric_features):
+    mean = train[numeric_features].mean()
+    std = train[numeric_features].std()
+    train[numeric_features] = (train[numeric_features] - mean) / std
+    val[numeric_features] = (val[numeric_features] - mean) / std
+    return train, val, mean, std
 
-# Vérifier quelles colonnes existent réellement dans le DataFrame
-categorical_features = [feature for feature in categorical_features if feature in x_train.columns]
-numeric_features = [feature for feature in numeric_features if feature in x_train.columns]
+# Normaliser les données d'entraînement et de validation
+x_train, x_val, mean, std = manual_normalize(x_train, x_val, numeric_features)
 
-# Définir le préprocesseur pour normaliser les caractéristiques numériques et encoder les caractéristiques catégorielles
-preprocessor = ColumnTransformer(
-    transformers=[
-        ('num', StandardScaler(), numeric_features),
-        ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
-    ]
-)
+# Entraîner le modèle
+model = GradientBoostingClassifier(random_state=42)
+model.fit(x_train, y_train)
 
-# Créer un pipeline avec le préprocesseur, SMOTE et le modèle Gradient Boosting
-pipeline_smote = ImbPipeline([
-    ('preprocessor', preprocessor),
-    ('smote', SMOTE(random_state=42)),
-    ('classifier', GradientBoostingClassifier(random_state=42))
-])
+# Prédire avec les données de validation
+y_pred = model.predict(x_val)
+accuracy = accuracy_score(y_val, y_pred)
 
-# Définir la grille de paramètres pour la recherche hyperparamétrique
-param_grid = {
-    'classifier__n_estimators': [100, 200, 300],
-    'classifier__learning_rate': [0.01, 0.1, 0.2],
-    'classifier__max_depth': [3, 4, 5]
-}
+# Sauvegarder le modèle, les statistiques de normalisation et les noms des features
+joblib.dump(model, 'stress_model.pkl')
+joblib.dump((mean, std), 'scaler_params.pkl')
+joblib.dump(x_train.columns.tolist(), 'feature_names.pkl')
 
-# Créer un objet GridSearchCV
-grid_search = GridSearchCV(pipeline_smote, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
-
-# Entraîner le GridSearchCV
-grid_search.fit(x_train, y_train)
-
-# Obtenir les meilleurs paramètres et le meilleur score
-best_params = grid_search.best_params_
-best_score = grid_search.best_score_
-
-print(f"Meilleurs paramètres: {best_params}")
-print(f"Meilleur score de validation croisée: {best_score}")
-
-# Utiliser le meilleur estimateur pour prédire le jeu de validation
-best_model = grid_search.best_estimator_
-y_pred_best = best_model.predict(x_val)
-accuracy_best = accuracy_score(y_val, y_pred_best)
-print(f"Accuracy sur le set de validation avec le meilleur modèle: {accuracy_best}")
-
-# Calculer et afficher l'importance des caractéristiques
-feature_importances = best_model.named_steps['classifier'].feature_importances_
-numeric_feature_names = numeric_features
-categorical_feature_names = best_model.named_steps['preprocessor'].transformers_[1][1].get_feature_names_out(categorical_features).tolist()
-feature_names = numeric_feature_names + categorical_feature_names
-
-# Créer un DataFrame avec les importances des caractéristiques
-feature_importances_df = pd.DataFrame({
-    'Feature': feature_names,
-    'Importance': feature_importances
-})
-
-# Trier les caractéristiques par importance
-feature_importances_df = feature_importances_df.sort_values(by='Importance', ascending=False)
-
-# Sélectionner les 5 premières caractéristiques
-top_features = feature_importances_df.head(5)['Feature'].tolist()
-
-# Sélectionner les caractéristiques originales correspondantes
-original_top_features = [f for f in numeric_features + categorical_features if any(f in top_feature for top_feature in top_features)]
-
-# Créer un dataset intermédiaire avec uniquement les caractéristiques les plus importantes
-x_train_reduced = x_train[original_top_features]
-x_val_reduced = x_val[original_top_features]
-
-# Appliquer le préprocesseur aux données réduites
-preprocessor_reduced = ColumnTransformer(
-    transformers=[
-        ('num', StandardScaler(), [feature for feature in original_top_features if feature in numeric_features]),
-        ('cat', OneHotEncoder(handle_unknown='ignore'), [feature for feature in original_top_features if feature in categorical_features])
-    ]
-)
-
-# Ajuster le préprocesseur avec les nouvelles données réduites
-x_train_reduced_transformed = preprocessor_reduced.fit_transform(x_train_reduced)
-x_val_reduced_transformed = preprocessor_reduced.transform(x_val_reduced)
-
-# Entraîner le modèle avec les données réduites et prétraitées
-final_model = GradientBoostingClassifier(random_state=42, **best_params)
-final_model.fit(x_train_reduced_transformed, y_train)
-
-# Prédire avec les données de validation réduites
-y_pred_gb_reduced = final_model.predict(x_val_reduced_transformed)
-
-# Calculer et afficher l'accuracy et le rapport de classification avec les caractéristiques réduites
-accuracy_gb_reduced = accuracy_score(y_val, y_pred_gb_reduced)
-print(f"Accuracy avec les caractéristiques réduites: {accuracy_gb_reduced}")
-
-# Validation croisée avec le pipeline optimisé
-cv_scores = cross_val_score(best_model, x, y, cv=5, scoring='accuracy')
-print(f"Scores de validation croisée: {cv_scores}")
-print(f"Moyenne des scores de validation croisée: {cv_scores.mean()}")
-
-# Rapport de classification
-print("Rapport de classification avec le meilleur modèle:")
-print(classification_report(y_val, y_pred_best))
-
-# Matrice de confusion
-print("Matrice de confusion:")
-print(confusion_matrix(y_val, y_pred_best))
+# Afficher les résultats
+print(f'Accuracy: {accuracy}')

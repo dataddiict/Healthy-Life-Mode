@@ -23,6 +23,9 @@ model_sleep_path_encode = settings.MODEL_SLEEP_PATH_ENCODE
 model_obesity_path = settings.MODEL_OBESITY_PATH
 model_obesity_path_encode = settings.MODEL_OBESITY_PATH_ENCODE
 model_obesity_path_preprocess = settings.MODEL_OBESITY_PATH_PREPROCESS
+model_stress_path = settings.MODEL_STRESS_PATH
+model_stress_path_params = settings.MODEL_STRESS_PATH_PARAMS
+model_stress_path_features = settings.MODEL_STRESS_PATH_FEATURES
 
 class FollowDataUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -39,6 +42,12 @@ class FollowDataUser(models.Model):
     ch2o = models.FloatField(null=True, blank=True)
     fcvc = models.FloatField(null=True, blank=True)
     ncp = models.FloatField(null=True, blank=True)
+    Days_Indoors = models.CharField(max_length=20, null=True, blank=True)
+    Changes_Habits = models.CharField(max_length=10, null=True, blank=True)
+    Work_Interest = models.CharField(max_length=10, null=True, blank=True)
+    Social_Weakness = models.CharField(max_length=10, null=True, blank=True)
+    Mental_Health_History = models.CharField(max_length=10, null=True, blank=True)
+
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
@@ -74,7 +83,11 @@ class UserProfile(models.Model):
     ch2o = models.FloatField(null=True, blank=True)
     fcvc = models.FloatField(null=True, blank=True)
     ncp = models.FloatField(null=True, blank=True)
-
+    Days_Indoors = models.CharField(max_length=20, null=True, blank=True)
+    Changes_Habits = models.CharField(max_length=10, null=True, blank=True)
+    Work_Interest = models.CharField(max_length=10, null=True, blank=True)
+    Social_Weakness = models.CharField(max_length=10, null=True, blank=True)
+    Mental_Health_History = models.CharField(max_length=10, null=True, blank=True)
     def __str__(self):
         return self.user.username
 
@@ -104,6 +117,11 @@ class User_User(models.Model):
     ch2o = models.FloatField(null=True, blank=True)
     fcvc = models.FloatField(null=True, blank=True)
     ncp = models.FloatField(null=True, blank=True)
+    Days_Indoors = models.CharField(max_length=20, null=True, blank=True)
+    Changes_Habits = models.CharField(max_length=10, null=True, blank=True)
+    Work_Interest = models.CharField(max_length=10, null=True, blank=True)
+    Social_Weakness = models.CharField(max_length=10, null=True, blank=True)
+    Mental_Health_History = models.CharField(max_length=10, null=True, blank=True)
     @classmethod
     def create_user(cls, mail, password, first_name, last_name, username):
         try:
@@ -366,4 +384,72 @@ def predict_sleep_disorder(user_id):
     features = preprocess_user_data(user_profile)
     prediction = model.predict([features])[0]
     return prediction
+#_______________________________________________________________________________________________________________________
 
+def load_model_stress():
+    return joblib.load(model_stress_path)
+
+def load_scaler_params():
+    return joblib.load(model_stress_path_params)
+
+def load_feature_names():
+    return joblib.load(model_stress_path_features)
+
+def transform_data(data):
+    data['Days_Indoors'] = data['Days_Indoors'].map({'1-14 days': 0, '15-30 days': 1, '31-60 days': 2, 'More than 60 days': 3})
+    data['Changes_Habits'] = data['Changes_Habits'].map({'Yes': 0, 'No': 1, 'Maybe': 2})
+    data['Work_Interest'] = data['Work_Interest'].map({'Yes': 0, 'No': 1})
+    data['Social_Weakness'] = data['Social_Weakness'].map({'Yes': 0, 'No': 1, 'Maybe': 2})
+    data['Mental_Health_History'] = data['Mental_Health_History'].map({'Yes': 0, 'No': 1, 'Maybe': 2})
+    data['Gender'] = data['Gender'].map({'Male': 0, 'Female': 1})
+
+    return data
+
+def manual_normalize(df, mean, std, numeric_features):
+    df[numeric_features] = (df[numeric_features] - mean) / std
+    return df
+
+def preprocess_user_data_stress(user_profile):
+    mean, std = load_scaler_params()
+    feature_names = load_feature_names()
+    gender_map = {'M': 'Male', 'F': 'Female'}
+    gender = gender_map.get(user_profile.sexe, user_profile.sexe)
+    
+    data = {
+        'Days_Indoors': [user_profile.Days_Indoors],
+        'Changes_Habits': [user_profile.Changes_Habits],
+        'Work_Interest': [user_profile.Work_Interest],
+        'Social_Weakness': [user_profile.Social_Weakness],
+        'Mental_Health_History': [user_profile.Mental_Health_History],
+        'Gender': [gender]
+    }
+
+    df = pd.DataFrame(data)
+    print("Initial DataFrame:")
+    print(df)
+
+    # Encoder manuellement les caractéristiques catégorielles
+    df = transform_data(df)
+    
+    # Normaliser manuellement les caractéristiques numériques
+    numeric_features = []  # Update this if there are numeric features
+    df = manual_normalize(df, mean, std, numeric_features)
+
+    # Ensure the DataFrame has the same columns in the same order as during training
+    df = df[feature_names]
+    
+    print("Transformed Data Shape:", df.shape)
+    print("Transformed Data:")
+    print(df)
+
+    return df
+
+def predict_stress(user_id):
+    model = load_model_stress()
+    user_profile = get_object_or_404(UserProfile, user_id=user_id)
+    features = preprocess_user_data_stress(user_profile)
+    
+    prediction_num = model.predict(features)[0]
+    print("Stress Prediction:", prediction_num)
+    
+    return prediction_num

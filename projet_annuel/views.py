@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User as DjangoUser
-from .models import UserProfile, predict_sleep_disorder, predict_obesity
+from .models import UserProfile, predict_sleep_disorder, predict_obesity, predict_stress
 from django import forms
 from .models import User_User, getunbr_user, UserUpdateForm
 from django.contrib.auth.models import User
@@ -67,7 +67,32 @@ def update_user(request):
 
         
 
+from django import forms
+from .models import UserProfile
+
 class UserProfileUpdateForm(forms.ModelForm):
+    DAYS_INDOORS_CHOICES = [
+        ('1-14 days', '1-14 days'), 
+        ('15-30 days', '15-30 days'), 
+        ('31-60 days', '31-60 days'), 
+        ('More than 60 days', 'More than 60 days')
+    ]
+    YES_NO_MAYBE_CHOICES = [
+        ('Yes', 'Yes'), 
+        ('No', 'No'), 
+        ('Maybe', 'Maybe')
+    ]
+    YES_NO_CHOICES = [
+        ('Yes', 'Yes'), 
+        ('No', 'No')
+    ]
+
+    Days_Indoors = forms.ChoiceField(choices=DAYS_INDOORS_CHOICES)
+    Changes_Habits = forms.ChoiceField(choices=YES_NO_MAYBE_CHOICES)
+    Work_Interest = forms.ChoiceField(choices=YES_NO_CHOICES)
+    Social_Weakness = forms.ChoiceField(choices=YES_NO_MAYBE_CHOICES)
+    Mental_Health_History = forms.ChoiceField(choices=YES_NO_MAYBE_CHOICES)
+
     class Meta:
         model = UserProfile
         fields = ['age', 'sexe',
@@ -75,9 +100,8 @@ class UserProfileUpdateForm(forms.ModelForm):
                   'steps', 'sleep_quality',
                   'sleep_duration', 'physical_activity',
                   'stress_level',
-                  'ch2o','fcvc','ncp'
-                  
-                  ]
+                  'ch2o','fcvc','ncp','Days_Indoors', 'Changes_Habits', 'Work_Interest', 'Social_Weakness', 'Mental_Health_History'
+                ]
 
 @login_required
 def update_profile(request):
@@ -99,11 +123,14 @@ def predict_sleep_disorder_view(request):
     user_id = request.user.id
     prediction = predict_sleep_disorder(user_id)
     prediction_obs = predict_obesity(user_id)
+    prediction_stress = predict_stress(user_id)
 
     result_sleep = ''
     message_sleep = ''
     result_obesity = ''
     message_obesity = ''
+    result_stress = ''
+    message_stress = ''
 
     if prediction == 0:
         result_sleep = 'Pas de trouble du sommeil'
@@ -137,11 +164,23 @@ def predict_sleep_disorder_view(request):
         result_obesity = "Obésité de type III"
         message_obesity = "Vous êtes obèse morbide. Il est crucial de consulter un spécialiste pour un soutien approprié."
 
+    if prediction_stress == 0:
+        result_stress = 'Pas de stress'
+        message_stress = 'Félicitations ! Vous n\'êtes pas stressé. Continuez à maintenir une bonne hygiène de vie.'
+    elif prediction_stress == 1:
+        result_stress = 'Stress modéré'
+        message_stress = 'Vous êtes modérément stressé. Essayez de pratiquer des activités relaxantes pour réduire votre niveau de stress.'
+    elif prediction_stress == 2:
+        result_stress = 'Stress élevé'
+        message_stress = 'Vous êtes très stressé. Il est recommandé de pratiquer des activités relaxantes et de consulter un professionnel de la santé.'
+
     context = {
         'result_sleep': result_sleep,
         'message_sleep': message_sleep,
         'result_obesity': result_obesity,
-        'message_obesity': message_obesity
+        'message_obesity': message_obesity,
+        'result_stress': result_stress,
+        'message_stress': message_stress
     }
     return render(request, 'prediction_result.html', context)
 
