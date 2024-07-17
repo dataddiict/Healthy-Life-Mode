@@ -72,7 +72,8 @@
                         <p class="card-text"> {{ profile.Last_Prediction_text }}</p>
             </div>
             <div class="text-center mt-5">
-                {% if profile.age and profile.sexe and profile.height and profile.weight and profile.steps and profile.sleep_quality and profile.sleep_duration and profile.physical_activity and profile.stress_level %}
+                {% if profile.age and profile.sexe and profile.height and profile.weight and profile.steps and profile.sleep_quality and profile.sleep_duration and profile.physical_activity and profile.stress_level and profile.fcvc and profile.ncp and profile.ch2o and profile.Days_Indoors and profile.Changes_Habits and profile.Work_Interest and profile.Social_Weakness and profile.Mental_Health_History%}
+                    
                     <a href="{% url 'predict_sleep_disorder' %}" class="btn btn-custom">Predict</a>
                 {% else %}
                     <p class="text-danger">Veuillez compléter toutes les informations de votre profil pour utiliser la prédiction.
