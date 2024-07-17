@@ -8,14 +8,14 @@
     <div class="card">
         <div class="card-body text-center">
             <h2 class="card-title">Résultat de la Prédiction sommeil</h2>
-            <p class="card-text display-4">{{ result_sleep  }}</p>
+            <p class="card-text display-5">{{ sleep_disorder_message  }}</p>
             <p class="card-text">{{ message_sleep  }}</p>
             <h2 class="card-title">Résultat de la Prédiction obésité</h2>
-            <p class="card-text display-4">{{ result_obesity  }}</p>
+            <p class="card-text display-5">{{ obesity_status_message  }}</p>
             <p class="card-text">{{ message_obesity  }}</p>
             <h2 class="card-title">Résultat de la Prédiction stress</h2>
-            <p class="card-text display-4">{{ result_stress  }}</p>
-            <p class="card-text">{{ message_stress  }}</p>
+            <p class="card-text display-5">{{ stress_status_message  }}</p>
+            <p class="card-text">{{recommendations }}</p>
             <a href="{% url 'user_profile' %}" class="btn btn-custom mt-3">Retour au Profil</a>
         </div>
     </div>

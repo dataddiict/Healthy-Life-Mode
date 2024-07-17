@@ -53,21 +53,28 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
 
-    @classmethod
-    def update_user_django(cls, mail, password, first_name, last_name, username):
-        try:
-            user = User.objects.get(email=mail)
-            user.username = username
-            user.email = mail
-            user.set_password(password)
-            user.first_name = first_name
-            user.last_name = last_name
-            user.save()
-            print("Utilisateur mis à jour avec succès !")
-            return user
-        except Exception as error:
-            print("Erreur lors de la mise à jour de l'utilisateur :", error)
-            return None
+    
+def get_user_by_id(user_id):
+    try:
+        # get all information of the user
+        user = UserProfile.objects.get(id=user_id)
+        return user
+    except User.DoesNotExist:
+        print("Utilisateur non trouvé !")
+        return None
+def update_Last_Prediction_text(user_id, text,sleep,obesity,stress):
+    try:
+        user = UserProfile.objects.get(user_id=user_id)
+        user.Last_Prediction_text = text
+        user.Last_sleep_prediction = sleep
+        user.Last_obesity_prediction = obesity
+        user.Last_stress_prediction = stress
+        user.save()
+        print("Texte de dernière prédiction mis à jour avec succès !")
+        return user
+    except Exception as error:
+        print("Erreur lors de la mise à jour du texte de dernière prédiction :", error)
+        return None
 
 class UserProfile(models.Model):
     user = models.OneToOneField(DjangoUser, on_delete=models.CASCADE)
@@ -88,12 +95,26 @@ class UserProfile(models.Model):
     Work_Interest = models.CharField(max_length=10, null=True, blank=True)
     Social_Weakness = models.CharField(max_length=10, null=True, blank=True)
     Mental_Health_History = models.CharField(max_length=10, null=True, blank=True)
+    Last_Prediction_text = models.CharField(max_length=10000, null=True, blank=True)
+    Last_sleep_prediction = models.CharField(max_length=1000, null=True, blank=True)
+    Last_obesity_prediction = models.CharField(max_length=1000, null=True, blank=True)
+    Last_stress_prediction = models.CharField(max_length=1000, null=True, blank=True)
     def __str__(self):
         return self.user.username
+    
+    @classmethod
+    def get_user_profile(cls, user_id):
+        try:
+            user_profile = UserProfile.objects.get(user_id=user_id)
+            return user_profile
+        except Exception as error:
+            print("Erreur lors de la récupération du profil de l'utilisateur :", error)
+            return None
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
+
 
 from django.db.models.signals import post_save
 post_save.connect(create_user_profile, sender=DjangoUser)
@@ -199,7 +220,7 @@ class User_User(models.Model):
         except Exception as error:
             print("Erreur lors de la mise à jour de l'utilisateur :", error)
             return None
-
+        
 
 class Image(models.Model):
     title = models.CharField(max_length=100)

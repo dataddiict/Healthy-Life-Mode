@@ -60,6 +60,17 @@
         <div class="container mt-5">
             <h5 class="text-center">Analyser vos informations !</h5>
             <h6 class="text-center">Analyser vos informations pour prédire les troubles de santé</h6>
+            <div class="container mt-5">
+                <div class="card">
+                    <div class="container mt-5">
+                        <h5 class="card-title">Dernière prediction</h5>
+                        
+                        <p class="card-text"> <h6>sommeil:</h6> {{ profile.Last_sleep_prediction }}</p>
+                        <p class="card-text"> <h6>poids :</h6> {{ profile.Last_obesity_prediction }}</p>
+                        <p class="card-text"> <h6>stress :</h6> {{ profile.Last_stress_prediction }}</p>
+                        <h5 class="card-title">Dernière recommandation</h5>
+                        <p class="card-text"> {{ profile.Last_Prediction_text }}</p>
+            </div>
             <div class="text-center mt-5">
                 {% if profile.age and profile.sexe and profile.height and profile.weight and profile.steps and profile.sleep_quality and profile.sleep_duration and profile.physical_activity and profile.stress_level %}
                     <a href="{% url 'predict_sleep_disorder' %}" class="btn btn-custom">Predict</a>
