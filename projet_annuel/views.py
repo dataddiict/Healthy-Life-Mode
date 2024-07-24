@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User as DjangoUser
-from .models import UserProfile, predict_sleep_disorder, predict_obesity, predict_stress, get_user_by_id, update_Last_Prediction_text
+from .models import UserProfile, predict_sleep_disorder, predict_obesity, predict_stress, get_user_by_id, update_Last_Prediction_text, update_user_profile
 from django import forms
 from .models import User_User, getunbr_user, UserUpdateForm
 from django.contrib.auth.models import User
@@ -31,10 +31,14 @@ def inscription(request):
         password = request.POST.get('password')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
+        
         user = DjangoUser.objects.create_user(username=username, email=mail, password=password)
         user.first_name = first_name
         user.last_name = last_name
         user.save()
+        update_user_profile(sender=DjangoUser, instance=user, created=True)        
+
+        
         return redirect('signin')
     return render(request, 'signup.html')
 
@@ -58,6 +62,7 @@ def update_user(request):
         if form.is_valid():
             form.save()
             messages.success(request, f'Your account has been updated!')
+            update_user_profile(sender=DjangoUser, instance=request.user, created=False)
             return redirect('user_profile')
     else:
         form = UserUpdateForm(instance=request.user)

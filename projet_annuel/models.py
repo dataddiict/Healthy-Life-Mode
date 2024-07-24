@@ -57,7 +57,10 @@ class UserUpdateForm(forms.ModelForm):
 def get_user_by_id(user_id):
     try:
         # get all information of the user
-        user = UserProfile.objects.get(id=user_id)
+        user = UserProfile.objects.get(user_id=user_id)
+        # get all information of the user
+         
+
         return user
     except User.DoesNotExist:
         print("Utilisateur non trouvé !")
@@ -115,6 +118,27 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
 
+def update_user_profile(sender, instance, created, **kwargs):
+    if not created:
+        user_profile = UserProfile.objects.get(user=instance)
+        user_profile.age = instance.age
+        user_profile.sexe = instance.sexe
+        user_profile.height = instance.height
+        user_profile.weight = instance.weight
+        user_profile.steps = instance.steps
+        user_profile.sleep_quality = instance.sleep_quality
+        user_profile.sleep_duration = instance.sleep_duration
+        user_profile.stress_level = instance.stress_level
+        user_profile.physical_activity = instance.physical_activity
+        user_profile.ch2o = instance.ch2o
+        user_profile.fcvc = instance.fcvc
+        user_profile.ncp = instance.ncp
+        user_profile.Days_Indoors = instance.Days_Indoors
+        user_profile.Changes_Habits = instance.Changes_Habits
+        user_profile.Work_Interest = instance.Work_Interest
+        user_profile.Social_Weakness = instance.Social_Weakness
+        user_profile.Mental_Health_History = instance.Mental_Health_History
+        user_profile.save()
 
 from django.db.models.signals import post_save
 post_save.connect(create_user_profile, sender=DjangoUser)
@@ -150,6 +174,7 @@ class User_User(models.Model):
             user.first_name = first_name
             user.last_name = last_name
             user.save()
+            UserProfile.objects.create(user=user)
             print("Utilisateur créé avec succès !")
             return user
         except Exception as error:
