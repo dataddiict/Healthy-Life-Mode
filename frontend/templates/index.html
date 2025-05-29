@@ -113,9 +113,10 @@
         <h4 class="text-center" id="user-count">Chargement des utilisateurs...</h4>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    fetch("http://localhost:8000/api/user-count/")
+    fetch("http://localhost:8000/api/user_count/")
         .then(response => response.json())
         .then(data => {
+            console.log(data);  // Ajoute le log ici
             document.getElementById("user-count").innerText = `${data.user_count} utilisateurs inscrits`;
         })
         .catch(error => {
@@ -124,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 });
 </script>
+
 
     </div>
     <!-- Presentationd e smdoele de predicitond e probleme de sommeil de probleme de santé mental et de probleme d'obzsité  -->

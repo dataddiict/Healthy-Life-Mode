@@ -73,6 +73,8 @@ MIDDLEWARE = [
 ]
 
 
+CORS_ALLOW_CREDENTIALS = True
+
 ROOT_URLCONF = 'Back_end_PA.urls'
 import os
 TEMPLATES = [

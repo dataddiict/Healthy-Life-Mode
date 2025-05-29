@@ -20,12 +20,16 @@ from django.contrib import admin
 from django.urls import path, include
 import projet_annuel.views as views
 
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('api/signup/', views.inscription, name='api_signup'),
-    path('', include('projet_annuel.urls')),
-    
+    path('api/login/', views.api_login, name='api_login'),
+    path('api/logout/', views.api_logout, name='api_logout'),
+    path('api/user_profile/', views.api_user_profile, name='api_user_profile'),
+    path('api/user_count/', views.api_user_count, name='api_user_count'),
+    path('profile/', views.user_profile, name='user_profile'),
 ]
+
 
 
 if settings.DEBUG:
