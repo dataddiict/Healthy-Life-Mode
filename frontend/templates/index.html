@@ -1,9 +1,72 @@
-{% extends 'base.html' %}
-{% load static %}
+<link rel="stylesheet" href="static/css/styles.css">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Healthy-Life-Mod</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/media/images/favicon.png">
+    <!-- Direct link to CSS instead of Django static tag -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'hello_world' %}">
+            <img src="/media/images/logo.png" class="logo" alt="">Healthy-Life-Mode</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span>
+                <img src="/media/images/icon_burger.png" class="logo" alt="">
+            </span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+            <li id="auth-nav" style="display: none;">
+                <a class="btn btn-custom" href="user_profile.html">Profil</a>
+            </li>
+            <li id="logout-nav" style="display: none;">
+                <form action="logout.html" method="post">
+                        <button type="submit" class="btn btn-custom">Déconnexion</button>
+                    </form>
+            </li>
+            <li id="signup-nav" style="display: none;">
+                <a class="btn btn-custom" href="signup.html">Inscription</a>
+            </li>
+            <li id="signin-nav" style="display: none;">
+                <a class="btn btn-custom" href="signin.html">Connexion</a>
+            </li>
+            </ul>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+            // The boolean is passed as a string "true" or "false"
+            var isAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}";
+            if (isAuthenticated === "true") {
+                document.getElementById("auth-nav").style.display = "block";
+                document.getElementById("logout-nav").style.display = "block";
+            } else {
+                document.getElementById("signup-nav").style.display = "block";
+                document.getElementById("signin-nav").style.display = "block";
+            }
+            });
+        </script>
+    </nav>
 
-{% block title %}Accueil{% endblock %}
+    <div class="container mt-5">
+    </div>
 
-{% block content %}
+    <!-- Optional JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>
+
+
 <div class="container mt-5">
     <h1 class="text-center">Bienvenue sur Healthy-Life-Mode</h1>
     <p class="text-center">Notre mission est de vous aider à prédire les troubles de santé et à améliorer votre qualité
@@ -47,7 +110,21 @@
 
         <h2 class="text-center">Notre communauté grandi ! </h2>
         <h5 class="text-center">Rejoignez-nous pour bénéficier de nos services</h5>
-        <h4 class="text-center">{{ user_count }} utilisateurs inscrits</h4>
+        <h4 class="text-center" id="user-count">Chargement des utilisateurs...</h4>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("http://localhost:8000/api/user-count/")
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("user-count").innerText = `${data.user_count} utilisateurs inscrits`;
+        })
+        .catch(error => {
+            console.error("Erreur lors de la récupération du nombre d'utilisateurs:", error);
+            document.getElementById("user-count").innerText = "Erreur de chargement";
+        });
+});
+</script>
+
     </div>
     <!-- Presentationd e smdoele de predicitond e probleme de sommeil de probleme de santé mental et de probleme d'obzsité  -->
 
@@ -92,8 +169,13 @@
     </div>
 
 </div>
+    <!-- Footer -->
+    <footer class="bg-light text-center text-lg-start mt-auto">
+        <div class="text-center p-3 bg-dark text-white">
+            © 2024 Healthy-Life-Mode: MEKIDECHE Yacine - BLOCH Alexandre - JOUIN Victor
+        </div>
+    </footer>
 
-{% endblock %}
 <script>
     $(document).ready(function () {
         $('#mainCarousel').carousel({

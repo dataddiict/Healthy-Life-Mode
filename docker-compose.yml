@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:15
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: healthy_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  backend:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - backend
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/healthy_db
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5050:80"
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:

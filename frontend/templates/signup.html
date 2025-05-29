@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Healthy-Life-Mode</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/media/images/favicon.png">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html">
+            <img src="/media/images/logo.png" class="logo" alt="">Healthy-Life-Mode
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span><img src="/media/images/icon_burger.png" class="logo" alt=""></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li id="auth-nav" style="display: none;">
+                    <a class="btn btn-custom" href="user_profile.html">Profil</a>
+                </li>
+                <li id="logout-nav" style="display: none;">
+                    <form action="logout.html" method="post">
+                        <button type="submit" class="btn btn-custom">Déconnexion</button>
+                    </form>
+                </li>
+                <li id="signup-nav" style="display: none;">
+                    <a class="btn btn-custom" href="signup.html">Inscription</a>
+                </li>
+                <li id="signin-nav" style="display: none;">
+                    <a class="btn btn-custom" href="signin.html">Connexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>Inscription</h1>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="pseudo">Pseudo :</label>
+                <input type="text" class="form-control" id="pseudo" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email :</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe :</label>
+                <input type="password" class="form-control" id="password" required>
+            </div>
+            <div class="form-group">
+                <label for="first_name">Prénom :</label>
+                <input type="text" class="form-control" id="first_name" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Nom :</label>
+                <input type="text" class="form-control" id="last_name" required>
+            </div>
+            <button type="submit" class="btn btn-secondary">S'inscrire</button>
+        </form>  
+    </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const data = {
+                pseudo: document.getElementById('pseudo').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                first_name: document.getElementById('first_name').value,
+                last_name: document.getElementById('last_name').value
+            };
+
+           fetch('http://localhost:8000/api/signup/', {  // Si tu testes en local, mets localhost
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert('Inscription réussie !');
+                    window.location.href = 'signin.html';
+                } else {
+                    alert('Erreur : ' + (result.error || 'Une erreur est survenue'));
+                }
+            })
+            .catch(error => {
+                console.error('Erreur :', error);
+                alert('Erreur lors de l\'inscription');
+            });
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

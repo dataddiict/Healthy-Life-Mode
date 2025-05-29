@@ -226,11 +226,11 @@ class User_User(models.Model):
             user.save()
 
             conn = psycopg2.connect(
-                dbname=os.environ.get('DB_NAME'),
-                user=os.environ.get('DB_USER'),
-                password=os.environ.get('DB_PASSWORD'),
-                host=os.environ.get('DB_HOST'),
-                port=os.environ.get('DB_PORT')
+                dbname="healthy_db",
+                user="user",
+                password="password",
+                host="db",  # <= ici le changement clé
+                port="5432"
             )
             cursor = conn.cursor()
             cursor.execute(
@@ -264,11 +264,11 @@ class Service(models.Model):
     
 def getunbr_user():
     conn = psycopg2.connect(
-        dbname=os.environ.get('DB_NAME'),
-        user=os.environ.get('DB_USER'),
-        password=os.environ.get('DB_PASSWORD'),
-        host=os.environ.get('DB_HOST'),
-        port=os.environ.get('DB_PORT')
+        dbname="healthy_db",
+        user="user",
+        password="password",
+        host="db",  # <= ici le changement clé
+        port="5432"
     )
     cursor = conn.cursor()
     cursor.execute("SELECT COUNT(*) FROM auth_user")

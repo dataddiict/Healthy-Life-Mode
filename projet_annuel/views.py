@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User as DjangoUser
 from .models import UserProfile, predict_sleep_disorder, predict_obesity, predict_stress, get_user_by_id, update_Last_Prediction_text, update_user_profile
 from django import forms
@@ -10,7 +11,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib import messages
 from .models import UserProfile, FollowDataUser
-
+from django.http import JsonResponse
+import json
 
 def connection(request):
     if request.method == 'POST':
@@ -24,23 +26,30 @@ def connection(request):
             print("Erreur lors de la connexion !")
     return render(request, 'signin.html')
 
+@csrf_exempt
 def inscription(request):
     if request.method == 'POST':
-        username = request.POST.get('pseudo')
-        mail = request.POST.get('email')
-        password = request.POST.get('password')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        
-        user = DjangoUser.objects.create_user(username=username, email=mail, password=password)
-        user.first_name = first_name
-        user.last_name = last_name
-        user.save()
-        update_user_profile(sender=DjangoUser, instance=user, created=True)        
+        try:
+            data = json.loads(request.body)
+            username = data.get('pseudo')
+            mail = data.get('email')
+            password = data.get('password')
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
 
-        
-        return redirect('signin')
-    return render(request, 'signup.html')
+            user = DjangoUser.objects.create_user(username=username, email=mail, password=password)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+
+            # Appelle éventuellement update_user_profile
+            update_user_profile(sender=DjangoUser, instance=user, created=True)
+
+            return JsonResponse({'message': 'Utilisateur créé avec succès'}, status=201)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    
+    return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
 
 @login_required
 def user_profile(request):
