@@ -1,8 +1,11 @@
+version: "3.8"
+
 services:
   db:
     image: postgres:15
+    restart: always
     ports:
-    - "5432:5432"
+      - "5432:5432"
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -15,14 +18,19 @@ services:
   backend:
     build:
       context: .
+    command: >
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     depends_on:
       - db
-    networks:
-      - backend
     environment:
       - DATABASE_URL=postgres://user:password@db:5432/healthy_db
+      # Ajoute ici d'autres variables d'environnement Django si besoin
+    volumes:
+      - .:/app
+    networks:
+      - backend
 
   frontend:
     build:
